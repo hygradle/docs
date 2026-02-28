@@ -7,8 +7,6 @@ import { sidebar } from './astro.sidebar';
 import { devServerFileWatcher } from './config/integrations/dev-server-file-watcher';
 import { sitemap } from './config/integrations/sitemap';
 import { localesConfig } from './config/locales';
-import { starlightPluginLlmsTxt } from './config/plugins/llms-txt';
-import { starlightPluginSmokeTest } from './config/plugins/smoke-test';
 import { rehypeTasklistEnhancer } from './config/plugins/rehype-tasklist-enhancer';
 import { remarkFallbackLang } from './config/plugins/remark-fallback-lang';
 
@@ -53,7 +51,6 @@ export default defineConfig({
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hygradle/hygradle' }],
 			pagefind: false,
 			disable404Route: true,
-			plugins: [starlightPluginSmokeTest(), starlightPluginLlmsTxt()],
 		}),
 		sitemap(),
 	],

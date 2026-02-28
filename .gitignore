@@ -40,3 +40,5 @@ sandbox.config.json
 .cache
 **/_fonts/brand/
 .textlintcache
+
+.wrangler
