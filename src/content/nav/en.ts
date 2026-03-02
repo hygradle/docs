@@ -1,4 +1,5 @@
 export default {
+	recipes: 'Recipes',
 	start: 'Start',
 	'start.welcome': 'Welcome, world!',
 	'start.newProject': 'Start a new project',

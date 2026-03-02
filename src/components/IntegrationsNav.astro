@@ -5,7 +5,6 @@ import {
 	type IntegrationEntry,
 	isIntegrationEntry,
 } from '~/content.config';
-import { isLogoKey } from '~/data/logos';
 import { getLanguageFromURL } from '~/util/path-utils';
 import CardsNav from './NavGrid/CardsNav.astro';
 
@@ -28,7 +27,6 @@ function categoryLinksFromPages(pages: IntegrationEntry[], category: Integration
 					'/</span><wbr>' +
 					name.replaceAll('-', '&#8288;-&#8288;'),
 				href: pageUrl,
-				logo: { brand: isLogoKey(name) },
 			};
 		});
 }

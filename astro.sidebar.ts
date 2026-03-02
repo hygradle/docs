@@ -14,4 +14,9 @@ export const sidebar = [
 	group('start', {
 		items: ['getting-started'],
 	}),
+	group('recipes', {
+		autogenerate: {
+			directory: 'recipes',
+		},
+	}),
 ] satisfies StarlightUserConfig['sidebar'];

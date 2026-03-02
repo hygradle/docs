@@ -1,7 +1,6 @@
 ---
 import { englishPages } from '~/content';
 import { isMigrationEntry } from '~/content.config';
-import { isLogoKey } from '~/data/logos';
 import { getLanguageFromURL } from '~/util/path-utils';
 import CardsNav from './NavGrid/CardsNav.astro';
 
@@ -17,7 +16,7 @@ const links = enPages
 	.map((page) => {
 		const pageUrl = page.id.replace('en/', `/${lang}/`) + '/';
 		const slug = page.id.split('/').pop()?.replace('from-', '');
-		return { title: page.data.framework, href: pageUrl, logo: { brand: isLogoKey(slug) } };
+		return { title: page.data.framework, href: pageUrl };
 	});
 ---
 

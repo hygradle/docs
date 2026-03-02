@@ -4,7 +4,6 @@ import { getPageCategory } from '~/util/getPageCategory';
 import BackendGuidesNav from '../BackendGuidesNav.astro';
 import CMSGuidesNav from '../CMSGuidesNav.astro';
 import DeployGuidesNav from '../DeployGuidesNav.astro';
-import FeaturedCMSGuidesNav from '../FeaturedCMSGuidesNav.astro';
 import IntegrationsNav from '../IntegrationsNav.astro';
 import MediaGuidesNav from '../MediaGuidesNav.astro';
 import MigrationGuidesNav from '../MigrationGuidesNav.astro';
@@ -28,7 +27,6 @@ const { entry } = Astro.locals.starlightRoute;
 			<>
 				<h2>{Astro.locals.t('cms.navTitle')}</h2>
 				<h3>{Astro.locals.t('cms.featuredSubheading')}</h3>
-				<FeaturedCMSGuidesNav />
 				<h3>{Astro.locals.t('cms.allSubheading')}</h3>
 				<CMSGuidesNav minimal />
 			</>

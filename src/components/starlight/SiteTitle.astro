@@ -1,14 +1,14 @@
 ---
-import logo from '~/assets/astro-logo.svg?raw';
-import docs from '~/assets/docs.svg?raw';
+import Logo from '~/assets/logo.svg';
 
-const main = 'https://astro.build/';
+const main = 'https://docs.hygradle.dev/';
 const self = '/' + (Astro.locals.starlightRoute.locale || 'en') + '/getting-started/';
 ---
 
 <span class="site-title sl-flex">
-	<a class="astro-logo" href={main} set:html={logo} aria-label="Astro" />
-	<a class="docs-logo" href={self} set:html={docs} aria-label="Docs" />
+	<a class="logo" href={main} aria-label="Hygradle">
+		<Logo width="100%" height="100%" />
+	</a>
 </span>
 
 <style>
@@ -18,11 +18,10 @@ const self = '/' + (Astro.locals.starlightRoute.locale || 'en') + '/getting-star
 	.site-title a {
 		display: flex;
 	}
-	.astro-logo {
-		color: var(--sl-color-white);
-	}
-	.docs-logo {
-		color: var(--sl-color-text-accent);
+
+	.logo svg {
+		height: 2rem;
+		width: 1rem;
 	}
 
 	/* On focus, outline <img> and <svg> rather than <a> */

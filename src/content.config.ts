@@ -1,9 +1,7 @@
 import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
 import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 import { defineCollection, z, type CollectionEntry } from 'astro:content';
-import { file } from 'astro/loaders';
 import { AstroDocsI18nSchema } from './content/i18n-schema';
-import { logoKeys } from './data/logos';
 
 export const baseSchema = z.object({
 	type: z.literal('base').optional().default('base'),
@@ -25,20 +23,17 @@ export const baseSchema = z.object({
 // Third-party guide schemas (deploy, backend, cms, media)
 export const deploySchema = baseSchema.extend({
 	type: z.literal('deploy'),
-	logo: z.enum(logoKeys),
 	supports: z.array(z.enum(['static', 'ssr'])),
 });
 
 export const backendSchema = baseSchema.extend({
 	type: z.literal('backend'),
 	stub: z.boolean().default(false),
-	logo: z.enum(logoKeys),
 });
 
 export const cmsSchema = baseSchema.extend({
 	type: z.literal('cms'),
 	stub: z.boolean().default(false),
-	logo: z.enum(logoKeys),
 	featuredListing: z
 		.object({
 			tagline: z.string().min(30).max(160),
@@ -49,7 +44,6 @@ export const cmsSchema = baseSchema.extend({
 export const mediaSchema = baseSchema.extend({
 	type: z.literal('media'),
 	stub: z.boolean().default(false),
-	logo: z.enum(logoKeys),
 });
 
 // Our other schemas (integration, migration, tutorial, recipe)
@@ -148,7 +142,6 @@ export function createIsLangEntry(lang: string) {
 }
 
 export const isEnglishEntry = createIsLangEntry('en');
-export const isKoreanEntry = createIsLangEntry('ko');
 
 export const collections = {
 	docs: defineCollection({
@@ -158,48 +151,5 @@ export const collections = {
 	i18n: defineCollection({
 		loader: i18nLoader(),
 		schema: i18nSchema({ extend: AstroDocsI18nSchema }),
-	}),
-	// Contributors to the docs repo, updated weekly, sorted number of commits in descending order.
-	contributors: defineCollection({
-		loader: file('src/data/contributors.json'),
-		schema: contributorSchema,
-	}),
-	// Latest versions of official Astro npm packages.
-	packages: defineCollection({
-		loader: async () => {
-			const packages = [
-				'@astrojs/alpinejs',
-				'@astrojs/cloudflare',
-				'@astrojs/db',
-				'@astrojs/markdoc',
-				'@astrojs/mdx',
-				'@astrojs/netlify',
-				'@astrojs/node',
-				'@astrojs/partytown',
-				'@astrojs/preact',
-				'@astrojs/react',
-				'@astrojs/rss',
-				'@astrojs/sitemap',
-				'@astrojs/solid-js',
-				'@astrojs/svelte',
-				'@astrojs/vercel',
-				'@astrojs/vue',
-				'astro',
-			];
-			// See https://github.com/antfu/fast-npm-meta
-			const url = `https://npm.antfu.dev/${packages.join('+')}`;
-			const data = await fetch(url).then((res) => res.json());
-			return data.map((pkg: any) => ({ id: pkg.name, version: pkg.version }));
-		},
-		schema: z.object({ version: z.string() }),
-	}),
-	astroContributors: defineCollection({
-		loader: async () => {
-			const { data } = await fetch('https://astro.badg.es/api/v1/top-contributors.json').then(
-				(res) => res.json()
-			);
-			return data.map((contributor: any) => ({ id: contributor.username, ...contributor }));
-		},
-		schema: z.object({ avatar_url: z.string() }),
 	}),
 };

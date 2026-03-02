@@ -1,22 +1,19 @@
 ---
 import type { ComponentProps, HTMLAttributes } from 'astro/types';
-import BrandLogo from '../BrandLogo.astro';
 
 export interface Props extends HTMLAttributes<'li'> {
 	href: string;
-	logo?: ComponentProps<typeof BrandLogo>;
 	current?: boolean;
 	size?: 'small' | 'default' | 'large';
 }
 
-const { href, logo, current, size = 'default', class: classes, ...attrs } = Astro.props;
+const { href, current, size = 'default', class: classes, ...attrs } = Astro.props;
 ---
 
 <li
 	class:list={['card', { 'card--sm': size === 'small', 'card--lg': size === 'large' }, classes]}
 	{...attrs}
 >
-	{logo && <BrandLogo {...logo} />}
 	<div class="stack sl-flex">
 		<h3>
 			<a href={href} aria-current={current ? 'page' : 'false'}>
