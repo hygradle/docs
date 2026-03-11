@@ -1,3 +1,0 @@
-name = "hygradle-docs"
-main = "@astrojs/cloudflare/entrypoints/server"
-send_metrics = false
