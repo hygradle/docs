@@ -1,6 +1,6 @@
 import starlight from '@astrojs/starlight';
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
-import { defineConfig, sharpImageService } from 'astro/config';
+import { defineConfig } from 'astro/config';
 import rehypeSlug from 'rehype-slug';
 import remarkSmartypants from 'remark-smartypants';
 import { sidebar } from './astro.sidebar';
@@ -56,8 +56,20 @@ export default defineConfig({
 	],
 
 	trailingSlash: 'always',
-	scopedStyleStrategy: 'where',
 	compressHTML: false,
+
+	vite: {
+		ssr: {
+			optimizeDeps: {
+				exclude: [
+					'astro/virtual-modules/middleware.js',
+					'@astrojs/starlight/locals',
+					'@astrojs/starlight/route-data',
+					'@astrojs/starlight/components',
+				],
+			},
+		},
+	},
 
 	markdown: {
 		// Override with our own config
@@ -74,7 +86,11 @@ export default defineConfig({
 			rehypeTasklistEnhancer(),
 		],
 	},
+	experimental: {
+		rustCompiler: true,
+	},
 	adapter: cloudflare({
 		imageService: 'cloudflare',
+		prerenderEnvironment: 'node',
 	}),
 });

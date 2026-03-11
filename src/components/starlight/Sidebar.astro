@@ -47,8 +47,7 @@ assertGroups(sidebar);
 const makeId = (label: string) => '__tab-' + label.toLowerCase().replaceAll(/\s+/g, '-');
 
 /** Get the icon for a group. Update the icon names in the array to change the icons associated with a group. */
-const getIcon = (index: number) =>
-	(['rocket', 'open-book', 'information', 'puzzle', 'setting'] as const)[index];
+const getIcon = (index: number) => (['rocket', 'open-book'] as const)[index];
 
 /** Determine if an array of sidebar items contains the current page.  */
 const isCurrent = (sidebar: SidebarEntry[]): boolean =>
