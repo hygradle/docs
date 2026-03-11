@@ -1,3 +1,115 @@
 ---
 title: Getting Started
 ---
+
+Hygradle is a Gradle plugin designed to fix (or at least make bearable) some of the pain points with Hytale mod/plugin development.
+A non-exhaustive list of features include:
+
+- **Standalone dependency management.** Hygradle will use the same authentication strategy as the Hytale server to pull assets for the target game version. It does not require Hytale to even be installed (though you'll need it to connect to the server!)
+
+- **Authentication management.** A lot of Hytale is gated behind protected APIs (requiring you to prove you have an account). Hygradle manages authentication in the background and leverages the OAuth 2.0 device flow to obtain tokens, the same way as the Hytale server. This allows Hygradle to automatically pull asset bundles, create game sessions for development runs, etc.
+
+- **Hot reloading**. Hygradle uses a custom HotswapAgent plugin to restart plugin lifecycles (as if loading them for the first time) when their code is changed.
+
+## Important facts
+
+- Hygradle design choices are primarily driven by Gradle idioms and lazy primitives. It expects you to have **some** foundational Gradle knowledge for advanced use.
+## Installation
+
+It is recommended to use the Hygradle settings plugin and manage dependency repositories at the settings level, using [central declaration of repositories](https://docs.gradle.org/current/userguide/centralizing_repositories.html).
+
+```kotlin title="settings.gradle.kts"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id("dev.hygradle.settings") version "0.0.1"
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+```
+
+Then apply the main Hygradle project plugin:
+
+```kotlin title="build.gradle.kts"
+plugins {
+    id("dev.hygradle") version "0.0.1"
+}
+```
+
+## Configuration
+
+Hygradle configuration is done through the `hygradle` DSL block. By default, you are **required** to specify which version of Hytale you want to target in this project. If you are working with a pre-release, you can optionally specify the `patchline` to fetch the correct assets.
+
+```kotlin title="build.gradle.kts"
+hygradle {
+  hytale {
+    version = "2026.03.05-9fdc5985d"
+    patchline = Patchline.RELEASE // Defaults to release
+  }
+}
+```
+
+## Define a plugin
+You can define any number of plugins in a single project. Hygradle is designed this way to support multi-plugin projects, or more complicated testing setups. However, the most common use case will be a single plugin:
+
+```kotlin
+hygradle {
+  plugins {
+    register("examplePlugin", LateClass::class) {
+      sourceSet(sourceSets.main) // Defaults to main, if you only have one source set this is optional
+      manifest.mainClass = "my.main.plugin.class"
+    }
+  }
+}
+```
+
+The `manifest` block for each plugin allows you to specify individual fields in the plugin manifest. Name, group, and version all default to the registered name, Gradle project group, and Gradle project version. The only requirement is to specify your main plugin class.
+
+There are several utility DSL methods to add authors and dependencies, which are serialized into the format Hytale expects.
+```kotlin
+hygradle {
+  plugins {
+    register("examplePlugin", LatePlugin::class) {
+      manifest {
+        author {
+          name = "Simon"
+        }
+        
+        dependency {
+          group = "Hytale"
+          name = "Shop"
+          version = "*"
+          
+          optional = false // Defaults to false, used to mark plugins as option dependencies
+        }
+      }
+    }
+  }
+}
+```
+
+Hytale will automatically add your targeted Hytale server version as a compilation dependency to all source sets tied to plugins.
+
+## Define a game run
+
+Hygradle is designed to allow many unique development server runs, with the option to include plugins by name. Again, the most common use case will be to run a server with your single plugin:
+
+```kotlin
+hygradle {
+  runs {
+    register("examplePluginOnly", Run::class) {
+      includePlugins("examplePlugin")
+    }
+  }
+}
+```
+
+Hygradle will add your plugin to the server's classpath, and ensure that any assets included in your plugin are available for live editing on the server. Starting the Gradle task in debug mode will allow you to hotswap classes at runtime, and trigger plugin reloads.

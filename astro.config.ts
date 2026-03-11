@@ -26,6 +26,7 @@ export default defineConfig({
 			title: 'Docs',
 			expressiveCode: {
 				plugins: [pluginCollapsibleSections()],
+				themes: ['nord'],
 			},
 			components: {
 				EditLink: './src/components/starlight/EditLink.astro',
