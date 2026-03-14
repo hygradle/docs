@@ -28,22 +28,31 @@ There will eventually come a time where you will need to pull in dependencies. E
 
 ### External dependencies
 
-If you need to depend on a Hytale plugin, ensure you've correctly set up a Maven repository you can source the dependency from. Then add it to your plugin, and your plugin manifest respectively:
+In general, typical single-plugin projects should specify non-Hytale dependencies through the usual top-level Gradle dependency handlers. However, Hygradle includes a plugin-scoped dependency handler to express dependency semantics that aren't native to Gradle.
+ If you need to depend on a Hytale plugin, prefer this approach:
+ 
+ ```kotlin title="build.gradle.kts"
+ import dev.hygradle.dsl.plugin.LatePlugin
+ 
+ hygradle {
+   plugins {
+     register<LatePlugin>("examplePlugin") {
+       dependencies {
+         plugin("other:mavenartifact:version")
+       }
+     }
+   }
+ }
+ ```
+
+You will also need to add the dependency to the manifest:
 
 ```kotlin title="build.gradle.kts"
 import dev.hygradle.dsl.plugin.LatePlugin
 
 hygradle {
   plugins {
-    register<LatePlugin>("examplePlugin") {
-      dependencies {
-        // For runtime only dependencies
-        runtimeOnly("other:mavenartifact:version")
-        
-        // For compile-time only dependencies
-        compileOnly("other:mavenartifact:version")
-      }
-      
+    register<LatePlugin>("examplePlugin") {      
       manifest {
         mainClass = "whatever.my.fully.qualified.plugin.class.is"
         group = "MyPlugin"

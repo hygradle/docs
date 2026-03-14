@@ -23,7 +23,7 @@ pluginManagement {
     }
 }
 
-plugins { id("dev.hygradle.settings") version "0.0.3" }
+plugins { id("dev.hygradle.settings") version "0.0.4" }
 
 rootProject.name = "example-plugin"
 
@@ -69,20 +69,22 @@ plugins {
 
 ## Repositories
 
-Gradle currently has two supports methods of declaring Maven repositories for dependencies. You can either manage them per-project, or at [the settings level](https://docs.gradle.org/current/userguide/centralizing_repositories.html). Hygradle is unopinionated about which approach you use, and instead provides a repository handler extension you must call:
+Gradle currently has two supports methods of declaring Maven repositories for dependencies. You can either manage them per-project, or at [the settings level](https://docs.gradle.org/current/userguide/centralizing_repositories.html). 
+Hygradle is unopinionated about which approach you use, and instead provides a repository handler extension you must call, and supply your intended patchline:
 
 ```kotlin
 import dev.hygradle.dsl.settings.hytale
+import dev.hygradle.dsl.hytale.Patchline
 
 // Project repository
 repositories {
-  hytale()
+  hytale(Patchline.RELEASE)
 }
 
 // Central repositories
 dependencyResolutionManagement {
   repositories {
-    hytale()
+    hytale(Patchline.RELEASE)
   }
 }
 ```
