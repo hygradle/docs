@@ -1,13 +1,13 @@
-import { LinkCheckerState, type LinkCheckerOptions } from './lib/linkcheck/base/base.ts';
-import { CanonicalUrl } from './lib/linkcheck/checks/canonical-url.ts';
-import { GoodLabels } from './lib/linkcheck/checks/good-link-label.ts';
-import { RelativeUrl } from './lib/linkcheck/checks/relative-url.ts';
-import { SameLanguage } from './lib/linkcheck/checks/same-language.ts';
-import { TargetExists } from './lib/linkcheck/checks/target-exists.ts';
-import { getPagePathnamesFromSitemap, parsePages } from './lib/linkcheck/steps/build-index.ts';
-import { addSourceFileAnnotations, findLinkIssues } from './lib/linkcheck/steps/find-issues.ts';
-import { handlePossibleAutofix } from './lib/linkcheck/steps/optional-autofix.ts';
-import { outputAnnotationsForGitHub, outputIssues } from './lib/linkcheck/steps/output-issues.ts';
+import { LinkCheckerState, type LinkCheckerOptions } from "./lib/linkcheck/base/base.ts";
+import { CanonicalUrl } from "./lib/linkcheck/checks/canonical-url.ts";
+import { GoodLabels } from "./lib/linkcheck/checks/good-link-label.ts";
+import { RelativeUrl } from "./lib/linkcheck/checks/relative-url.ts";
+import { SameLanguage } from "./lib/linkcheck/checks/same-language.ts";
+import { TargetExists } from "./lib/linkcheck/checks/target-exists.ts";
+import { getPagePathnamesFromSitemap, parsePages } from "./lib/linkcheck/steps/build-index.ts";
+import { addSourceFileAnnotations, findLinkIssues } from "./lib/linkcheck/steps/find-issues.ts";
+import { handlePossibleAutofix } from "./lib/linkcheck/steps/optional-autofix.ts";
+import { outputAnnotationsForGitHub, outputIssues } from "./lib/linkcheck/steps/output-issues.ts";
 
 /**
  * Contains all link checking logic.
@@ -65,21 +65,21 @@ class LinkChecker {
 
 // Use our class to check for link issues
 const linkChecker = new LinkChecker({
-	baseUrl: 'https://docs.astro.build',
-	buildOutputDir: './dist',
-	pageSourceDir: './src/content/docs',
+	baseUrl: "https://docs.astro.build",
+	buildOutputDir: "./dist",
+	pageSourceDir: "./src/content/docs",
 	checks: [
 		new TargetExists(),
 		new SameLanguage({
-			ignoredLinkPathnames: ['/lighthouse/'],
+			ignoredLinkPathnames: ["/lighthouse/"],
 		}),
 		new CanonicalUrl({
-			ignoreMissingCanonicalUrl: ['/lighthouse/'],
+			ignoreMissingCanonicalUrl: ["/lighthouse/"],
 		}),
 		new RelativeUrl(),
 		new GoodLabels(),
 	],
-	autofix: process.argv.includes('--autofix') || Boolean(process.env.npm_config_autofix),
+	autofix: process.argv.includes("--autofix") || Boolean(process.env.npm_config_autofix),
 });
 
 linkChecker.run();

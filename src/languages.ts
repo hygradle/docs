@@ -1,5 +1,5 @@
-import type { GetStaticPaths } from 'astro';
-import { localesConfig, twoLocalesConfig } from '../config/locales';
+import type { GetStaticPaths } from "astro";
+import { localesConfig, twoLocalesConfig } from "../config/locales";
 
 /** The current Starlight i18n configuration depending if we are running smoke tests or not. */
 const currentLocalesConfig = process.env.PUBLIC_TWO_LANG ? twoLocalesConfig : localesConfig;
@@ -15,6 +15,6 @@ export const getStaticPaths: GetStaticPaths = () => {
 /** A set of all RTL languages currently configured. */
 export const rtlLanguages = new Set(
 	Object.entries(currentLocalesConfig)
-		.filter(([, config]) => config.dir === 'rtl')
-		.map(([lang]) => lang)
+		.filter(([, config]) => config.dir === "rtl")
+		.map(([lang]) => lang),
 );

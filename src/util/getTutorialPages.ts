@@ -1,12 +1,12 @@
-import type { TutorialEntry } from '~/content.config';
-import { stripLangFromSlug } from '~/util/path-utils';
-import { groupPagesByLang } from './groupPagesByLang';
+import type { TutorialEntry } from "~/content.config";
+import { stripLangFromSlug } from "~/util/path-utils";
+import { groupPagesByLang } from "./groupPagesByLang";
 
 /** Get a full list of pages for the tutorial in the current language, falling back to English if not available. */
 export function getTutorialPages(allPages: TutorialEntry[], lang: string) {
 	const pagesByLang = groupPagesByLang(allPages);
 	/** Pages */
-	const pages = pagesByLang['en']
+	const pages = pagesByLang["en"]
 		.map((englishPage) => {
 			const enSlug = stripLangFromSlug(englishPage.id);
 			const langPage = pagesByLang[lang]?.find((page) => stripLangFromSlug(page.id) === enSlug);
@@ -33,6 +33,6 @@ export function getTutorialUnits(tutorialPages: TutorialEntry[]) {
 			}
 			return units;
 		},
-		[] as { title: string; lessons: typeof tutorialPages }[]
+		[] as { title: string; lessons: typeof tutorialPages }[],
 	);
 }

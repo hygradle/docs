@@ -1,8 +1,8 @@
 // @ts-check
 
-import fs from 'fs';
+import fs from "fs";
 // @ts-expect-error — Untyped npm package
-import jsdoc from 'jsdoc-api';
+import jsdoc from "jsdoc-api";
 
 // Fill this in to test a response locally, with fetching.
 const STUB = ``; // fs.readFileSync('/PATH/TO/MONOREPO/astro/packages/astro/src/types/public/config.ts', {encoding: 'utf-8'});
@@ -42,20 +42,20 @@ const FOOTER = ``;
  * source file directly.  It uses the default parser configuration.
  */
 export async function run() {
-	const sourceBranch = process.env.SOURCE_BRANCH || 'main';
-	const sourceRepo = process.env.SOURCE_REPO || 'withastro/astro';
+	const sourceBranch = process.env.SOURCE_BRANCH || "main";
+	const sourceRepo = process.env.SOURCE_REPO || "withastro/astro";
 
-	let task = 'Fetch `src/types/public/config.ts` from ' + sourceRepo + '#' + sourceBranch;
+	let task = "Fetch `src/types/public/config.ts` from " + sourceRepo + "#" + sourceBranch;
 	console.time(task);
 
 	const inputBuffer =
 		STUB ||
 		(await fetch(
-			`https://raw.githubusercontent.com/${sourceRepo}/${sourceBranch}/packages/astro/src/types/public/config.ts`
+			`https://raw.githubusercontent.com/${sourceRepo}/${sourceBranch}/packages/astro/src/types/public/config.ts`,
 		).then((r) => r.text()));
 
 	console.timeEnd(task);
-	task = 'Parse types and generate configuration reference';
+	task = "Parse types and generate configuration reference";
 	console.time(task);
 
 	// Get all `@docs` JSDoc comments in the file.
@@ -64,11 +64,11 @@ export async function run() {
 	];
 	const allCommentsInput = allComments
 		.map((m) => m[0])
-		.filter((c) => c.includes('* @docs'))
-		.join('\n\n');
+		.filter((c) => c.includes("* @docs"))
+		.join("\n\n");
 
 	const allParsedComments = (await jsdoc.explain({ source: allCommentsInput })).filter(
-		(/** @type {any} */ data) => data.tags
+		(/** @type {any} */ data) => data.tags,
 	);
 
 	let result = ``;
@@ -84,28 +84,28 @@ export async function run() {
 			getCommentProperties(comment),
 			comment.description?.trim() || undefined,
 			comment.see
-				? `**See Also:**\n${comment.see.map((/** @type {any} */ s) => `- ${s}`.trim()).join('\n')}`
+				? `**See Also:**\n${comment.see.map((/** @type {any} */ s) => `- ${s}`.trim()).join("\n")}`
 				: undefined,
 			`\n`,
 		]
 			.filter((l) => l !== undefined)
-			.join('\n');
+			.join("\n");
 	}
 
 	// Make any links to docs relative instead of absolute.
-	result = result.replace(/https:\/\/docs\.astro\.build\//g, '/');
+	result = result.replace(/https:\/\/docs\.astro\.build\//g, "/");
 
 	// Make self-referencing anchor links relative
-	result = result.replace(/(?<=\]\()\/en\/reference\/configuration-reference\/#([^)\s]+)/g, '#$1');
+	result = result.replace(/(?<=\]\()\/en\/reference\/configuration-reference\/#([^)\s]+)/g, "#$1");
 
 	console.timeEnd(task);
-	task = 'Update configuration-reference.mdx';
+	task = "Update configuration-reference.mdx";
 	console.time(task);
 
 	fs.writeFileSync(
-		'src/content/docs/en/reference/configuration-reference.mdx',
+		"src/content/docs/en/reference/configuration-reference.mdx",
 		HEADER + result + FOOTER,
-		'utf8'
+		"utf8",
 	);
 
 	console.timeEnd(task);
@@ -116,7 +116,7 @@ export async function run() {
  * @param {number} headingLevel
  */
 function h(headingLevel) {
-	return Array.from({ length: headingLevel }).fill('#').join('');
+	return Array.from({ length: headingLevel }).fill("#").join("");
 }
 
 /**
@@ -125,10 +125,10 @@ function h(headingLevel) {
  */
 function getHeading(comment) {
 	let headingLevel = 3;
-	const headingMatches = /^h(1|2|3|4|5|6)$/.exec(comment.kind || '');
+	const headingMatches = /^h(1|2|3|4|5|6)$/.exec(comment.kind || "");
 	if (headingMatches) {
 		headingLevel = parseInt(headingMatches[1]);
-	} else if (comment.kind === 'heading') {
+	} else if (comment.kind === "heading") {
 		headingLevel = 2;
 	}
 	return `${h(headingLevel)} ${comment.longname}\n`;
@@ -141,12 +141,12 @@ function getHeading(comment) {
 function getDeprecatedAside(tag) {
 	if (!tag) return undefined;
 	return [
-		'',
-		':::caution[Deprecated]',
-		typeof tag === 'string' ? tag : 'This option is deprecated.',
-		':::',
-		'',
-	].join('\n');
+		"",
+		":::caution[Deprecated]",
+		typeof tag === "string" ? tag : "This option is deprecated.",
+		":::",
+		"",
+	].join("\n");
 }
 
 /**
@@ -154,19 +154,19 @@ function getDeprecatedAside(tag) {
  * @param {{ tags: { title: string; text: string }[]; kind: string; type?: { names: string [] }; defaultvalue?: string; version?: string }} comment
  */
 function getCommentProperties(comment) {
-	const cliFlag = comment.tags.find((f) => f.title === 'cli');
-	const typerawFlag = comment.tags.find((f) => f.title === 'typeraw');
+	const cliFlag = comment.tags.find((f) => f.title === "cli");
+	const typerawFlag = comment.tags.find((f) => f.title === "typeraw");
 
-	if (comment.kind !== 'heading' && !comment.type && !typerawFlag) {
+	if (comment.kind !== "heading" && !comment.type && !typerawFlag) {
 		throw new Error(`Missing @docs JSDoc tag: @type or @typeraw`);
 	}
 	const typesFormatted = (
-		typerawFlag ? typerawFlag.text.replace(/\{(.*)\}/, '$1') : comment.type?.names.join(' | ')
+		typerawFlag ? typerawFlag.text.replace(/\{(.*)\}/, "$1") : comment.type?.names.join(" | ")
 	)
 		// JSDoc represents types like objects and arrays using an old Closure-style notation,
 		// e.g. `Array.<string>` or `Record.<string, string>`. This `replace()` removes the `.` to match
 		// the notation used for TypeScript-style generics.
-		?.replaceAll('.<', '<');
+		?.replaceAll(".<", "<");
 
 	const properties = [
 		typesFormatted ? `**Type:** \`${typesFormatted}\`` : undefined,
@@ -175,9 +175,9 @@ function getCommentProperties(comment) {
 		comment.version ? `<Since v="${comment.version}" />` : undefined,
 	]
 		.filter((l) => l !== undefined)
-		.join('<br />\n');
+		.join("<br />\n");
 
-	return properties.length ? ['<p>', '', properties, '</p>', ''].join('\n') : undefined;
+	return properties.length ? ["<p>", "", properties, "</p>", ""].join("\n") : undefined;
 }
 
 run();

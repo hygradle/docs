@@ -1,4 +1,4 @@
-export type SubListType = 'primary' | 'secondary';
+export type SubListType = "primary" | "secondary";
 type ListState = Record<SubListType, boolean[]>;
 type PageState = { done: boolean; lists: Record<string, ListState> };
 type ProgressState = Record<string, PageState>;
@@ -112,7 +112,7 @@ type ProgressState = Record<string, PageState>;
  *
  */
 export class ProgressStore {
-	private static key = 'astro-tutorial-progress';
+	private static key = "astro-tutorial-progress";
 	private static pageKey = ProgressStore.slugFromPathname(window.location.pathname);
 	private static state: ProgressState = {
 		[ProgressStore.pageKey]: { done: false, lists: {} },
@@ -139,7 +139,7 @@ export class ProgressStore {
 		listKey: string,
 		type: SubListType,
 		index: number,
-		value: boolean
+		value: boolean,
 	): void {
 		ProgressStore.pageState.lists[listKey][type][index] = value;
 		ProgressStore.store();
@@ -164,7 +164,7 @@ export class ProgressStore {
 
 	private static load(): ProgressState {
 		try {
-			const state = JSON.parse(localStorage.getItem(ProgressStore.key) || '{}');
+			const state = JSON.parse(localStorage.getItem(ProgressStore.key) || "{}");
 			if (ProgressStore.validate(state)) return state;
 		} catch {
 			/* assume no stored state */
@@ -175,8 +175,8 @@ export class ProgressStore {
 	private static validate(state: unknown): state is ProgressState {
 		return (
 			!!state &&
-			typeof state === 'object' &&
-			Object.values(state).every((val) => 'done' in val && val.lists)
+			typeof state === "object" &&
+			Object.values(state).every((val) => "done" in val && val.lists)
 		);
 	}
 
@@ -201,7 +201,7 @@ export class ProgressStore {
 
 	/** Work out if either of a checklist’s sub-lists is complete. */
 	private static isListDone(list: ListState): boolean {
-		return (['primary', 'secondary'] as const)
+		return (["primary", "secondary"] as const)
 			.map((type) => !!list[type].length && list[type].every((i) => i))
 			.some((i) => i);
 	}
@@ -209,6 +209,6 @@ export class ProgressStore {
 	private static slugFromPathname(pathname: string) {
 		// Remove the language segment from the path,
 		// and strip a trailing slash, if present.
-		return pathname.split('/').slice(2).join('/').replace(/\/$/, '');
+		return pathname.split("/").slice(2).join("/").replace(/\/$/, "");
 	}
 }

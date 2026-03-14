@@ -1,11 +1,11 @@
-import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
-import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
-import { defineCollection, type CollectionEntry } from 'astro:content';
-import { z } from 'astro/zod';
-import { AstroDocsI18nSchema } from './content/i18n-schema';
+import { docsLoader, i18nLoader } from "@astrojs/starlight/loaders";
+import { docsSchema, i18nSchema } from "@astrojs/starlight/schema";
+import { defineCollection, type CollectionEntry } from "astro:content";
+import { z } from "astro/zod";
+import { AstroDocsI18nSchema } from "./content/i18n-schema";
 
 export const baseSchema = z.object({
-	type: z.literal('base').optional().default('base'),
+	type: z.literal("base").optional().default("base"),
 	i18nReady: z.boolean().default(false),
 	githubURL: z.url().optional(),
 	hasREADME: z.boolean().optional(),
@@ -23,17 +23,17 @@ export const baseSchema = z.object({
 
 // Third-party guide schemas (deploy, backend, cms, media)
 export const deploySchema = baseSchema.extend({
-	type: z.literal('deploy'),
-	supports: z.array(z.enum(['static', 'ssr'])),
+	type: z.literal("deploy"),
+	supports: z.array(z.enum(["static", "ssr"])),
 });
 
 export const backendSchema = baseSchema.extend({
-	type: z.literal('backend'),
+	type: z.literal("backend"),
 	stub: z.boolean().default(false),
 });
 
 export const cmsSchema = baseSchema.extend({
-	type: z.literal('cms'),
+	type: z.literal("cms"),
 	stub: z.boolean().default(false),
 	featuredListing: z
 		.object({
@@ -43,36 +43,36 @@ export const cmsSchema = baseSchema.extend({
 });
 
 export const mediaSchema = baseSchema.extend({
-	type: z.literal('media'),
+	type: z.literal("media"),
 	stub: z.boolean().default(false),
 });
 
 // Our other schemas (integration, migration, tutorial, recipe)
 export const integrationSchema = baseSchema.extend({
-	type: z.literal('integration'),
+	type: z.literal("integration"),
 	title: z
 		.string()
 		.refine(
-			(title) => title.startsWith('@astrojs/'),
-			'"title" must start with "@astrojs/" for integration docs.'
+			(title) => title.startsWith("@astrojs/"),
+			'"title" must start with "@astrojs/" for integration docs.',
 		),
-	category: z.enum(['renderer', 'adapter', 'other']),
+	category: z.enum(["renderer", "adapter", "other"]),
 	githubIntegrationURL: z.url(),
 });
 
 export const migrationSchema = baseSchema.extend({
-	type: z.literal('migration'),
+	type: z.literal("migration"),
 	framework: z.string(),
 	stub: z.boolean().default(false),
 });
 
 export const tutorialSchema = baseSchema.extend({
-	type: z.literal('tutorial'),
+	type: z.literal("tutorial"),
 	unitTitle: z.string().optional(),
 });
 
 export const recipeSchema = baseSchema.extend({
-	type: z.literal('recipe'),
+	type: z.literal("recipe"),
 	description: z.string(),
 	altTitle: z.string().optional(),
 });
@@ -91,55 +91,55 @@ export const docsCollectionSchema = z.union([
 
 export type DocsEntryData = z.infer<typeof docsCollectionSchema>;
 
-export type DocsEntryType = DocsEntryData['type'];
+export type DocsEntryType = DocsEntryData["type"];
 
-export type DocsEntry<T extends DocsEntryType> = CollectionEntry<'docs'> & {
+export type DocsEntry<T extends DocsEntryType> = CollectionEntry<"docs"> & {
 	data: Extract<DocsEntryData, { type: T }>;
 };
 
 export function createIsDocsEntry<T extends DocsEntryType>(type: T) {
-	return (entry: CollectionEntry<'docs'>): entry is DocsEntry<T> => entry.data.type === type;
+	return (entry: CollectionEntry<"docs">): entry is DocsEntry<T> => entry.data.type === type;
 }
 
-export type DeployEntry = DocsEntry<'deploy'>;
+export type DeployEntry = DocsEntry<"deploy">;
 
-export type BackendEntry = DocsEntry<'backend'>;
+export type BackendEntry = DocsEntry<"backend">;
 
-export type CmsEntry = DocsEntry<'cms'>;
+export type CmsEntry = DocsEntry<"cms">;
 
-export type IntegrationEntry = DocsEntry<'integration'>;
+export type IntegrationEntry = DocsEntry<"integration">;
 
-export type MigrationEntry = DocsEntry<'migration'>;
+export type MigrationEntry = DocsEntry<"migration">;
 
-export type TutorialEntry = DocsEntry<'tutorial'>;
+export type TutorialEntry = DocsEntry<"tutorial">;
 
-export type RecipeEntry = DocsEntry<'recipe'>;
+export type RecipeEntry = DocsEntry<"recipe">;
 
-export type IntegrationCategory = z.infer<typeof integrationSchema>['category'];
+export type IntegrationCategory = z.infer<typeof integrationSchema>["category"];
 
-export const isBackendEntry = createIsDocsEntry('backend');
+export const isBackendEntry = createIsDocsEntry("backend");
 
-export const isCmsEntry = createIsDocsEntry('cms');
+export const isCmsEntry = createIsDocsEntry("cms");
 
-export const isDeployEntry = createIsDocsEntry('deploy');
+export const isDeployEntry = createIsDocsEntry("deploy");
 
-export const isIntegrationEntry = createIsDocsEntry('integration');
+export const isIntegrationEntry = createIsDocsEntry("integration");
 
-export const isTutorialEntry = createIsDocsEntry('tutorial');
+export const isTutorialEntry = createIsDocsEntry("tutorial");
 
-export const isMediaEntry = createIsDocsEntry('media');
+export const isMediaEntry = createIsDocsEntry("media");
 
-export const isMigrationEntry = createIsDocsEntry('migration');
+export const isMigrationEntry = createIsDocsEntry("migration");
 
-export const isRecipeEntry = createIsDocsEntry('recipe');
+export const isRecipeEntry = createIsDocsEntry("recipe");
 
 export function createIsLangEntry(lang: string) {
-	return (entry: CollectionEntry<'docs'>): boolean => entry.id.startsWith(lang + '/');
+	return (entry: CollectionEntry<"docs">): boolean => entry.id.startsWith(lang + "/");
 }
 
-export const isEnglishEntry = createIsLangEntry('en');
+export const isEnglishEntry = createIsLangEntry("en");
 
-export const isKoreanEntry = createIsLangEntry('ko');
+export const isKoreanEntry = createIsLangEntry("ko");
 
 export const collections = {
 	docs: defineCollection({

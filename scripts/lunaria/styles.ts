@@ -1,17 +1,17 @@
-import { html } from './components.ts';
+import { html } from "./components.ts";
 
 export const BaseStyles = html`
 	<style>
 		:root {
 			/** Fonts */
 			--ln-font-fallback:
-				-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
-				Apple Color Emoji, Segoe UI Emoji;
+				-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji,
+				Segoe UI Emoji;
 			--ln-font-body: system-ui, var(--ln-font-fallback);
 			--ln-font-mono:
-				'IBM Plex Mono', Consolas, 'Andale Mono WT', 'Andale Mono', 'Lucida Console',
-				'Lucida Sans Typewriter', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono',
-				'Nimbus Mono L', Monaco, 'Courier New', Courier, monospace;
+				"IBM Plex Mono", Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console",
+				"Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+				"Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
 
 			/* Light theme colors */
 			--ln-color-white: #f9fafb;
@@ -296,8 +296,7 @@ export const CustomStyles = html`
 			--theme-bg-gradient: linear-gradient(
 				180deg,
 				var(--theme-bg-gradient-top),
-				var(--theme-bg-gradient-top)
-					calc(var(--theme-navbar-height) + var(--theme-mobile-toc-height)),
+				var(--theme-bg-gradient-top) calc(var(--theme-navbar-height) + var(--theme-mobile-toc-height)),
 				var(--theme-bg-gradient-bottom)
 			);
 

@@ -1,7 +1,7 @@
-import kleur from 'kleur';
-import { dedentMd } from '../../output.mjs';
-import { CheckBase, type CheckHtmlPageContext } from '../base/check.ts';
-import { IssueType } from '../base/issue.ts';
+import kleur from "kleur";
+import { dedentMd } from "../../output.mjs";
+import { CheckBase, type CheckHtmlPageContext } from "../base/check.ts";
+import { IssueType } from "../base/issue.ts";
 
 export interface SameLanguageOptions {
 	/**
@@ -16,8 +16,8 @@ export interface SameLanguageOptions {
 
 export class SameLanguage extends CheckBase {
 	private static readonly UnexpectedLanguageLink = new IssueType({
-		title: 'link(s) to unexpected language(s)',
-		prefix: kleur.gray(`[${kleur.cyan().bold('lng')}]`),
+		title: "link(s) to unexpected language(s)",
+		prefix: kleur.gray(`[${kleur.cyan().bold("lng")}]`),
 		sortOrder: 300,
 	});
 
@@ -60,7 +60,7 @@ export class SameLanguage extends CheckBase {
 					autofixHref,
 					annotationText: dedentMd`Expected link path to start with
 						"/${context.page.pathnameLang}/", but found
-						${linkedLang ? `"/${linkedLang}/"` : 'no language prefix'}.
+						${linkedLang ? `"/${linkedLang}/"` : "no language prefix"}.
 						The correct prefix is required to ensure that users stay on their
 						selected language version of the docs.`,
 				});

@@ -1,5 +1,5 @@
-import type { Document, Element } from 'domhandler';
-import { parseDocument, DomUtils } from 'htmlparser2';
+import type { Document, Element } from "domhandler";
+import { parseDocument, DomUtils } from "htmlparser2";
 
 export interface AllPagesByPathname {
 	[key: string]: HtmlPage;
@@ -79,7 +79,7 @@ export class HtmlPage {
 		this.pathname = pathname;
 
 		// Provide commonly used data as properties
-		this.anchors = DomUtils.getElementsByTagName('a', parser.dom, true).map((el) => ({
+		this.anchors = DomUtils.getElementsByTagName("a", parser.dom, true).map((el) => ({
 			// Pass the strings through Buffer to allow Node to reallocate them into independent memory
 			// instead of using slices of the original large string containing the full HTML document.
 			//
@@ -103,9 +103,10 @@ export class HtmlPage {
 		// Check if the page redirects somewhere else using meta refresh
 		const metaRefreshElement = parser.findFirst(
 			(el) =>
-				el.tagName.toLowerCase() === 'meta' && el.attribs['http-equiv']?.toLowerCase() === 'refresh'
+				el.tagName.toLowerCase() === "meta" &&
+				el.attribs["http-equiv"]?.toLowerCase() === "refresh",
 		);
-		const metaRefreshContent = metaRefreshElement?.attribs['content'];
+		const metaRefreshContent = metaRefreshElement?.attribs["content"];
 		const metaRefreshMatches = metaRefreshContent?.match(/^([0-9]+)\s*;\s*url\s*=\s*(.+)$/i);
 		this.redirectTargetUrl = metaRefreshMatches ? new URL(metaRefreshMatches[2], this.href) : null;
 		this.isRedirect = Boolean(this.redirectTargetUrl);
@@ -113,15 +114,15 @@ export class HtmlPage {
 		// Get the page's canonical URL (if any)
 		const linkCanonicalElement = parser.findFirst(
 			(el) =>
-				el.tagName.toLowerCase() === 'link' && el.attribs['rel']?.toLowerCase() === 'canonical'
+				el.tagName.toLowerCase() === "link" && el.attribs["rel"]?.toLowerCase() === "canonical",
 		);
 		this.canonicalUrl =
-			(linkCanonicalElement && new URL(linkCanonicalElement.attribs['href'])) || null;
+			(linkCanonicalElement && new URL(linkCanonicalElement.attribs["href"])) || null;
 
 		// Attempt to find the page's main content element
 		const mainContent =
-			parser.findFirst((el) => el.tagName.toLowerCase() === 'main') ||
-			parser.findFirst((el) => el.tagName.toLowerCase() === 'body');
+			parser.findFirst((el) => el.tagName.toLowerCase() === "main") ||
+			parser.findFirst((el) => el.tagName.toLowerCase() === "body");
 
 		this.hasContent = Boolean(mainContent);
 
@@ -136,7 +137,7 @@ export class HtmlPage {
 
 		// Detect if this is a language fallback page
 		this.isLanguageFallback =
-			Boolean(this.pathnameLang) && this.pathnameLang !== 'en' && this.mainContentLang === 'en';
+			Boolean(this.pathnameLang) && this.pathnameLang !== "en" && this.mainContentLang === "en";
 	}
 
 	/**
@@ -145,7 +146,7 @@ export class HtmlPage {
 	 */
 	getExpectedLinkPathname(sourceLang: string | null) {
 		let pathname = this.canonicalUrl?.pathname || this.pathname;
-		if (sourceLang && (this.isLanguageFallback || pathname.startsWith('/en/'))) {
+		if (sourceLang && (this.isLanguageFallback || pathname.startsWith("/en/"))) {
 			pathname = pathname.replace(/^\/en\//, `/${sourceLang}/`);
 		}
 		return pathname;
@@ -154,7 +155,7 @@ export class HtmlPage {
 	private getLanguageCodeFromPathname(pathname: string) {
 		// Assuming that `pathname` always starts with a `/`, retrieve the first path part,
 		// which is usually the language code
-		const firstPathPart = pathname.split('/')[1];
+		const firstPathPart = pathname.split("/")[1];
 		// Only return parts that look like a two-letter language code
 		// with optional two-letter country code
 		if (firstPathPart.match(/^[a-z]{2}(-[a-zA-Z]{2})?$/)) return firstPathPart;

@@ -1,15 +1,15 @@
-import kleur from 'kleur';
-import { dedentMd } from '../../output.mjs';
-import { CheckBase, type CheckHtmlPageContext } from '../base/check.ts';
-import { IssueType } from '../base/issue.ts';
+import kleur from "kleur";
+import { dedentMd } from "../../output.mjs";
+import { CheckBase, type CheckHtmlPageContext } from "../base/check.ts";
+import { IssueType } from "../base/issue.ts";
 
 /** List of labels that are insufficiently descriptive for a link. */
-const blocklist = new Set(['read more', 'click here', 'here', 'more']);
+const blocklist = new Set(["read more", "click here", "here", "more"]);
 
 export class GoodLabels extends CheckBase {
 	private static readonly BadLabel = new IssueType({
-		title: 'link(s) with vague or nondescript labels',
-		prefix: kleur.gray(`[${kleur.yellow().bold('lbl')}]`),
+		title: "link(s) with vague or nondescript labels",
+		prefix: kleur.gray(`[${kleur.yellow().bold("lbl")}]`),
 		sortOrder: 1000,
 	});
 
@@ -19,7 +19,7 @@ export class GoodLabels extends CheckBase {
 		if (context.page.isLanguageFallback) return;
 
 		context.page.anchors.forEach((anchor) => {
-			const linkLabel = anchor.label.replace(/[\n\s\t]+/g, ' ').trim();
+			const linkLabel = anchor.label.replace(/[\n\s\t]+/g, " ").trim();
 
 			if (!blocklist.has(linkLabel.toLowerCase())) return;
 

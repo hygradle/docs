@@ -1,0 +1,23 @@
+---
+title: Overview
+---
+
+:::caution
+Hygradle is **alpha quality software**. The Hytale modding ecosystem is seeing breaking changes weekly, and Hygradle is no exception. Do not expect Hygradle to reach a stable version until Hytale itself does.
+:::
+
+Hygradle is a combination of Gradle plugins and Hytale tooling (early plugins, etc.) designed to make Hytale plugin development easier. It was inspired by similar tooling in the Minecraft modding ecosystem (Neogradle, ModDevGradle), and aims to fulfill similar functionality.
+
+Hygradle currently covers two distinct components:
+
+- [Hygradle itself](https://github.com/hygradle/hygradle), the Gradle plugins.
+- [The harness](https://github.com/hygradle/harness), a collection of class transformers and other tooling that are used to patch issues (functional or ergonomic) in the Hytale server and aid development at runtime. It also includes a Hytale-specific HotswapAgent plugin to facilitate hot reloading plugins during development.
+
+### Design Principles
+
+These design principles govern all Hygradle contributions, and all contributors are expected to keep them in mind.
+
+1) **Prefer idiomatic or established Gradle patters above custom solutions.** The Gradle ecosystem is not perfect, but there are plenty of established patterns in large plugins like AGP, Kotlin Multiplatform, et all. Prefer to implement using established design patterns.
+2) **Expect the user to have *some* foundational Gradle knowledge.** Hygradle features are designed to leverage Gradle patterns and primitives, and generally are quite flexible because of it. Designing for non-technical or unfamiliar users leads to cruft or extra maintenance burden. Prefer building composable primitives over large-scale convenience.
+2) **User ergonomics is key.** If a feature would compromise ease of use within the previous constraints, the tradeoff must be discussed and noted if accepted. A perfect example of this is server decompilation.
+3) **All features must have parity in both the Kotlin and Groovy Gradle DSLs.** Both are still widely used, and Gradle abstractions largely give us parity for free. Still it must be covered for in functional tests.

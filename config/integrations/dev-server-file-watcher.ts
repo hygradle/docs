@@ -1,5 +1,5 @@
-import type { AstroIntegration } from 'astro';
-import glob from 'fast-glob';
+import type { AstroIntegration } from "astro";
+import glob from "fast-glob";
 
 /**
  * Astro integration that registers the passed paths so that saving them triggers a dev server
@@ -19,9 +19,9 @@ import glob from 'fast-glob';
  */
 export const devServerFileWatcher = (paths: string[]) =>
 	({
-		name: 'dev-server-file-watcher',
+		name: "dev-server-file-watcher",
 		hooks: {
-			async 'astro:config:setup'({ addWatchFile, config }) {
+			async "astro:config:setup"({ addWatchFile, config }) {
 				for (const path of paths) {
 					const files = await glob(path);
 					files.forEach((file) => addWatchFile(new URL(file, config.root)));

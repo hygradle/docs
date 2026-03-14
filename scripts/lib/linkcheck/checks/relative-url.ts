@@ -1,11 +1,11 @@
-import kleur from 'kleur';
-import { CheckBase, type CheckHtmlPageContext } from '../base/check.ts';
-import { IssueType } from '../base/issue.ts';
+import kleur from "kleur";
+import { CheckBase, type CheckHtmlPageContext } from "../base/check.ts";
+import { IssueType } from "../base/issue.ts";
 
 export class RelativeUrl extends CheckBase {
 	private static readonly AbsoluteLink = new IssueType({
-		title: 'unwanted absolute link(s)',
-		prefix: kleur.gray(`[${kleur.magenta().bold('abs')}]`),
+		title: "unwanted absolute link(s)",
+		prefix: kleur.gray(`[${kleur.magenta().bold("abs")}]`),
 		sortOrder: 600,
 	});
 
@@ -19,8 +19,8 @@ export class RelativeUrl extends CheckBase {
 			if (!linkedPage) return;
 
 			// Skip relative links
-			const rawUrl = new URL(linkHref, 'https://example.com/');
-			if (rawUrl.host === 'example.com') return;
+			const rawUrl = new URL(linkHref, "https://example.com/");
+			if (rawUrl.host === "example.com") return;
 
 			// Report the unwanted absolute link
 			const expectedPathname = linkedPage.getExpectedLinkPathname(context.page.pathnameLang);

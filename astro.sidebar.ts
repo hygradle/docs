@@ -10,13 +10,21 @@ import { group } from './config/sidebar';
  *
  */
 export const sidebar = [
-	// Start tab
 	group('start', {
-		items: ['getting-started'],
+		items: [
+			'overview',
+			group('start.quickstart', {
+				items: [
+					'quickstart/project-setup',
+					'quickstart/plugin-configuration',
+					'quickstart/run-configuration',
+				],
+			}),
+		],
 	}),
-	group('recipes', {
-		autogenerate: {
-			directory: 'recipes',
-		},
-	}),
+	// group('recipes', {
+	// 	autogenerate: {
+	// 		directory: 'recipes',
+	// 	},
+	// }),
 ] satisfies StarlightUserConfig['sidebar'];

@@ -7,52 +7,61 @@
  * Aurora:       nord11 #bf616a | nord12 #d08770 | nord13 #ebcb8b | nord14 #a3be8c | nord15 #b48ead
  */
 
-:root {
-	/* ── Gray scale ─────────────────────────────────────────────────
-	 * Starlight dark mode: white = lightest foreground, black = deepest background.
-	 * gray-1 → gray-6 grades from near-white down to near-black.
-	 */
-	--sl-color-white: #eceff4; /* nord6  — brightest text / emphasis */
-	--sl-color-gray-1: #d8dee9; /* nord4  — primary body text */
-	--sl-color-gray-2: #c2c8d4; /* blend  — secondary text (midpoint nord4↔nord3) */
-	--sl-color-gray-3: #7b88a1; /* blend  — muted text, comments */
-	--sl-color-gray-4: #4c566a; /* nord3  — subtle borders, inactive UI */
-	--sl-color-gray-5: #434c5e; /* nord2  — inline-code bg, selections */
-	--sl-color-gray-6: #3b4252; /* nord1  — nav/sidebar bg, elevated surfaces */
-	--sl-color-black: #2e3440; /* nord0  — page background */
+/* Declare layer order: Starlight's internal layers, then our custom layer last. */
+@layer starlight, custom;
 
-	/* ── Accent (Frost — nord8 primary) ─────────────────────────── */
-	--sl-color-accent-low: #2e3e4d; /* darkened nord8 — tinted background */
-	--sl-color-accent: #88c0d0; /* nord8  — links, interactive elements */
-	--sl-color-accent-high: #b8dce6; /* lightened nord8 — text on dark bg */
+@layer custom {
+	:root {
+		/* ── Gray scale ─────────────────────────────────────────────────
+		 * Starlight dark mode: white = lightest foreground, black = deepest background.
+		 * gray-1 → gray-6 grades from near-white down to near-black.
+		 */
+		--sl-color-white: #eceff4; /* nord6  — brightest text / emphasis */
+		--sl-color-gray-1: #d8dee9; /* nord4  — primary body text */
+		--sl-color-gray-2: #c2c8d4; /* blend  — secondary text (midpoint nord4↔nord3) */
+		--sl-color-gray-3: #7b88a1; /* blend  — muted text, comments */
+		--sl-color-gray-4: #4c566a; /* nord3  — subtle borders, inactive UI */
+		--sl-color-gray-5: #434c5e; /* nord2  — inline-code bg, selections */
+		--sl-color-gray-6: #3b4252; /* nord1  — nav/sidebar bg, elevated surfaces */
+		--sl-color-black: #2e3440; /* nord0  — page background */
 
-	/* ── Semantic: Blue (nord10) — "note" asides ────────────────── */
-	--sl-color-blue-low: #2e3a4d; /* darkened nord10 */
-	--sl-color-blue: #5e81ac; /* nord10 */
-	--sl-color-blue-high: #9bb5d0; /* lightened nord10 */
+		/* ── Accent (Frost — nord8 primary) ─────────────────────────── */
+		--sl-color-accent-low: #2e3e4d; /* darkened nord8 — tinted background */
+		--sl-color-accent: #88c0d0; /* nord8  — links, interactive elements */
+		--sl-color-accent-high: #b8dce6; /* lightened nord8 — text on dark bg */
 
-	/* ── Semantic: Green (nord14) — "tip" asides ────────────────── */
-	--sl-color-green-low: #363f32; /* darkened nord14 */
-	--sl-color-green: #a3be8c; /* nord14 */
-	--sl-color-green-high: #c9d9b8; /* lightened nord14 */
+		/* ── Semantic: Blue (nord10) — "note" asides ────────────────── */
+		--sl-color-blue-low: #2e3a4d; /* darkened nord10 */
+		--sl-color-blue: #5e81ac; /* nord10 */
+		--sl-color-blue-high: #9bb5d0; /* lightened nord10 */
 
-	/* ── Semantic: Orange (nord12) — "caution" asides ───────────── */
-	--sl-color-orange-low: #44362e; /* darkened nord12 */
-	--sl-color-orange: #d08770; /* nord12 */
-	--sl-color-orange-high: #e4b8a6; /* lightened nord12 */
+		/* ── Semantic: Green (nord14) — "tip" asides ────────────────── */
+		--sl-color-green-low: #363f32; /* darkened nord14 */
+		--sl-color-green: #a3be8c; /* nord14 */
+		--sl-color-green-high: #c9d9b8; /* lightened nord14 */
 
-	/* ── Semantic: Red (nord11) — "danger" asides ───────────────── */
-	--sl-color-red-low: #3d2e31; /* darkened nord11 */
-	--sl-color-red: #bf616a; /* nord11 */
-	--sl-color-red-high: #d9989e; /* lightened nord11 */
+		/* ── Semantic: Orange (nord12) — "caution" asides ───────────── */
+		--sl-color-orange-low: #44362e; /* darkened nord12 */
+		--sl-color-orange: #d08770; /* nord12 */
+		--sl-color-orange-high: #e4b8a6; /* lightened nord12 */
 
-	/* ── Semantic: Purple (nord15) ──────────────────────────────── */
-	--sl-color-purple-low: #3d3347; /* darkened nord15 */
-	--sl-color-purple: #b48ead; /* nord15 */
-	--sl-color-purple-high: #d1b5c9; /* lightened nord15 */
+		/* ── Semantic: Red (nord11) — "danger" asides ───────────────── */
+		--sl-color-red-low: #3d2e31; /* darkened nord11 */
+		--sl-color-red: #bf616a; /* nord11 */
+		--sl-color-red-high: #d9989e; /* lightened nord11 */
 
-	/* ── Semantic: Yellow/Warning (nord13) ──────────────────────── */
-	--sl-color-yellow-low: #3e3929; /* darkened nord13 */
-	--sl-color-yellow: #ebcb8b; /* nord13 */
-	--sl-color-yellow-high: #f2dfb5; /* lightened nord13 */
+		/* ── Semantic: Purple (nord15) ──────────────────────────────── */
+		--sl-color-purple-low: #3d3347; /* darkened nord15 */
+		--sl-color-purple: #b48ead; /* nord15 */
+		--sl-color-purple-high: #d1b5c9; /* lightened nord15 */
+
+		/* ── Semantic: Yellow/Warning (nord13) ──────────────────────── */
+		--sl-color-yellow-low: #3e3929; /* darkened nord13 */
+		--sl-color-yellow: #ebcb8b; /* nord13 */
+		--sl-color-yellow-high: #f2dfb5; /* lightened nord13 */
+	}
+
+	.social-icons svg {
+		font-size: 2rem;
+	}
 }

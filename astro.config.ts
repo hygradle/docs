@@ -1,76 +1,63 @@
-import starlight from '@astrojs/starlight';
-import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections';
-import { defineConfig } from 'astro/config';
-import rehypeSlug from 'rehype-slug';
-import remarkSmartypants from 'remark-smartypants';
-import { sidebar } from './astro.sidebar';
-import { devServerFileWatcher } from './config/integrations/dev-server-file-watcher';
-import { sitemap } from './config/integrations/sitemap';
-import { localesConfig } from './config/locales';
-import { rehypeTasklistEnhancer } from './config/plugins/rehype-tasklist-enhancer';
-import { remarkFallbackLang } from './config/plugins/remark-fallback-lang';
+import starlight from "@astrojs/starlight";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
+import { defineConfig } from "astro/config";
+import rehypeSlug from "rehype-slug";
+import remarkSmartypants from "remark-smartypants";
+import { sidebar } from "./astro.sidebar";
+import { devServerFileWatcher } from "./config/integrations/dev-server-file-watcher";
+import { sitemap } from "./config/integrations/sitemap";
+import { localesConfig } from "./config/locales";
+import { rehypeTasklistEnhancer } from "./config/plugins/rehype-tasklist-enhancer";
+import { remarkFallbackLang } from "./config/plugins/remark-fallback-lang";
 
-import cloudflare from '@astrojs/cloudflare';
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://docs.hygradle.dev',
+	site: "https://docs.hygradle.dev",
 
 	integrations: [
 		devServerFileWatcher([
-			'./config/**', // Custom plugins and integrations
-			'./astro.sidebar.ts', // Sidebar configuration file
-			'./src/content/nav/*.ts', // Sidebar labels
+			"./config/**", // Custom plugins and integrations
+			"./astro.sidebar.ts", // Sidebar configuration file
+			"./src/content/nav/*.ts", // Sidebar labels
 		]),
 		starlight({
-			title: 'Docs',
+			title: "Docs",
 			expressiveCode: {
 				plugins: [pluginCollapsibleSections()],
-				themes: ['nord'],
+				themes: ["nord"],
 			},
 			components: {
-				EditLink: './src/components/starlight/EditLink.astro',
-				Hero: './src/components/starlight/Hero.astro',
-				MarkdownContent: './src/components/starlight/MarkdownContent.astro',
-				MobileTableOfContents: './src/components/starlight/MobileTableOfContents.astro',
-				TableOfContents: './src/components/starlight/TableOfContents.astro',
-				PageSidebar: './src/components/starlight/PageSidebar.astro',
-				Footer: './src/components/starlight/Footer.astro',
-				SiteTitle: './src/components/starlight/SiteTitle.astro',
+				EditLink: "./src/components/starlight/EditLink.astro",
+				Hero: "./src/components/starlight/Hero.astro",
+				MarkdownContent: "./src/components/starlight/MarkdownContent.astro",
+				MobileTableOfContents: "./src/components/starlight/MobileTableOfContents.astro",
+				TableOfContents: "./src/components/starlight/TableOfContents.astro",
+				PageSidebar: "./src/components/starlight/PageSidebar.astro",
+				Footer: "./src/components/starlight/Footer.astro",
+				SiteTitle: "./src/components/starlight/SiteTitle.astro",
 				// Search: './src/components/starlight/Search.astro',
-				Sidebar: './src/components/starlight/Sidebar.astro',
-				MobileMenuFooter: './src/components/starlight/MobileMenuFooter.astro',
-				PageTitle: './src/components/starlight/PageTitle.astro',
-				ThemeProvider: './src/components/starlight/ForceDarkTheme.astro',
-				ThemeSelect: './src/components/starlight/EmptyComponent.astro',
+				Sidebar: "./src/components/starlight/Sidebar.astro",
+				MobileMenuFooter: "./src/components/starlight/MobileMenuFooter.astro",
+				PageTitle: "./src/components/starlight/PageTitle.astro",
+				ThemeProvider: "./src/components/starlight/ForceDarkTheme.astro",
+				ThemeSelect: "./src/components/starlight/EmptyComponent.astro",
 			},
-			routeMiddleware: './src/routeData.ts',
-			defaultLocale: 'en',
+			routeMiddleware: "./src/routeData.ts",
+			defaultLocale: "en",
 			locales: localesConfig,
 			sidebar,
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hygradle/hygradle' }],
+			social: [{ icon: "github", label: "GitHub", href: "https://github.com/hygradle/hygradle" }],
 			pagefind: false,
 			disable404Route: true,
-			customCss: ['./src/styles/custom.css'],
+			customCss: ["./src/styles/custom.css"],
 		}),
 		sitemap(),
 	],
 
-	trailingSlash: 'always',
+	trailingSlash: "always",
 	compressHTML: false,
-
-	vite: {
-		ssr: {
-			optimizeDeps: {
-				exclude: [
-					'astro/virtual-modules/middleware.js',
-					'@astrojs/starlight/locals',
-					'@astrojs/starlight/route-data',
-					'@astrojs/starlight/components',
-				],
-			},
-		},
-	},
 
 	markdown: {
 		// Override with our own config
@@ -89,9 +76,10 @@ export default defineConfig({
 	},
 	experimental: {
 		rustCompiler: true,
+		svgo: true,
 	},
 	adapter: cloudflare({
-		imageService: 'cloudflare',
-		prerenderEnvironment: 'node',
+		imageService: "cloudflare",
+		prerenderEnvironment: "node",
 	}),
 });

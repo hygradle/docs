@@ -1,17 +1,17 @@
-import kleur from 'kleur';
-import { dedentMd } from '../../output.mjs';
-import { CheckBase, type CheckHtmlPageContext } from '../base/check.ts';
-import { IssueType } from '../base/issue.ts';
+import kleur from "kleur";
+import { dedentMd } from "../../output.mjs";
+import { CheckBase, type CheckHtmlPageContext } from "../base/check.ts";
+import { IssueType } from "../base/issue.ts";
 
 export class TargetExists extends CheckBase {
 	private static readonly BrokenPageLink = new IssueType({
-		title: 'broken page link(s)',
-		prefix: kleur.gray(`[${kleur.red().bold('404')}]`),
+		title: "broken page link(s)",
+		prefix: kleur.gray(`[${kleur.red().bold("404")}]`),
 		sortOrder: 100,
 	});
 	private static readonly BrokenFragmentLink = new IssueType({
-		title: 'broken fragment link(s)',
-		prefix: kleur.gray(`[${kleur.yellow().bold(' # ')}]`),
+		title: "broken fragment link(s)",
+		prefix: kleur.gray(`[${kleur.yellow().bold(" # ")}]`),
 		sortOrder: 101,
 	});
 
@@ -44,7 +44,7 @@ export class TargetExists extends CheckBase {
 					linkHref,
 					annotationText: dedentMd`The linked page does not contain a fragment with
 						the name "${decodedHash}".
-						Available fragments: ${linkedPage.hashes.length ? linkedPage.hashes.join(', ') : 'none'}`,
+						Available fragments: ${linkedPage.hashes.length ? linkedPage.hashes.join(", ") : "none"}`,
 				});
 			}
 		});

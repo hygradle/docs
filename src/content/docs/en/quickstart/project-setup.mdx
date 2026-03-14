@@ -1,0 +1,88 @@
+---
+title: Project setup
+---
+
+:::tip
+Hygradle maintains an up-to-date [plugin template](https://github.com/hygradle/plugin-template) which codifies all of the best practices and recommendations on this page. Unless you have a more advanced use case, we'd recommend starting there.
+:::
+
+## Installation
+
+### Settings
+
+Most common configuration options Hygradle supports are changed at the settings level, through the Hygradle settings plugin. Apply it to your project settings, and configure your targeted Hytale version.
+
+:::note
+Unlike other tooling, Hygradle fetches everything required to run a server on its own, and manages caching itself. It does not require Hytale to be installed on the system used for development **at all**. However, this does mean you have to be cautious about version compatibility with the clients you test with.
+:::
+
+```kotlin title="settings.gradle.kts"
+pluginManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins { id("dev.hygradle.settings") version "0.0.3" }
+
+rootProject.name = "example-plugin"
+
+hygradle {
+    hytale {
+        version = "2026.02.19-1a311a592"
+    }
+}
+```
+
+#### Source decompilation
+
+If you would like Hygradle to decompile the server source and make it available in your IDE, enable decompilation:
+
+```kotlin title="settings.gradle.kts"
+hygradle {
+    hytale {
+        decompile = true
+    }
+}
+```
+
+#### Prerelease versions
+By default, Hygradle will target the release patchline. If you would like to target a pre-release version, ensure you configure it:
+
+```kotlin title="settings.gradle.kts"
+hygradle {
+    hytale {
+        patchline = Patchline.PRERELEASE
+    }
+}
+```
+
+### Build script
+
+Specific plugins and game runs are configured per-project. This separation allows Hygradle to properly support project isolation, and enables some cool cross-project interaction for multi-plugin projects. Apply the project plugin:
+
+```kotlin title="build.gradle.kts"
+plugins {
+  id("dev.hygradle")
+}
+```
+
+## Repositories
+
+Gradle currently has two supports methods of declaring Maven repositories for dependencies. You can either manage them per-project, or at [the settings level](https://docs.gradle.org/current/userguide/centralizing_repositories.html). Hygradle is unopinionated about which approach you use, and instead provides a repository handler extension you must call:
+
+```kotlin
+import dev.hygradle.dsl.settings.hytale
+
+// Project repository
+repositories {
+  hytale()
+}
+
+// Central repositories
+dependencyResolutionManagement {
+  repositories {
+    hytale()
+  }
+}
+```

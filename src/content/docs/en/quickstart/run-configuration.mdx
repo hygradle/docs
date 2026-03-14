@@ -1,0 +1,24 @@
+---
+title: Run configuration
+---
+
+## Basic configuration
+
+Game runs are unique, and each run configuration results in a new server being created. They do not share worlds, configuration, etc.
+Each run configuration can include any number of registered plugins - this is largely to support more complex, multi-plugin projects. By default, if you only have one plugin registered, each server run will use that unless you specify an empty list.
+
+```kotlin title="buid.gradle.kts"
+import dev.hygradle.dsl.run.Run
+
+hygradle {
+  runs {
+    register<Run>("onlyExamplePlugin")
+  }
+}
+```
+
+Each run configuration will result in a Gradle task named `start<RunName>Server` being registered. You can run this normally, or you can run it in debug mode in your IDE to enable hot reloading.
+
+### Hot reloading
+
+Hygradle uses a custom HotswapAgent plugin (built into the harness) to detect class redefinitions, and reload affected plugins and their lifecycle. Hygradle defaults projects to a Java 25 runtime that supports this, so this should **just work TM**.

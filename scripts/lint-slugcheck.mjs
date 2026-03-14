@@ -1,5 +1,5 @@
-import glob from 'fast-glob';
-import kleur from 'kleur';
+import glob from "fast-glob";
+import kleur from "kleur";
 
 /** Makes sure that all translations’ slugs match the English slugs. */
 class SlugChecker {
@@ -13,11 +13,11 @@ class SlugChecker {
 		const enSlugs = new Set();
 		/** @type {Record<string, string[]>} */
 		const errorMap = {};
-		(await glob('./src/content/docs/**/*.{md,mdx}'))
-			.filter((file) => !file.endsWith('404.mdx'))
+		(await glob("./src/content/docs/**/*.{md,mdx}"))
+			.filter((file) => !file.endsWith("404.mdx"))
 			.map((file) => {
-				const [, lang, slug] = file.replace('./src/content/docs/', '').match(/^([^/]+)\/(.+)$/);
-				if (lang === 'en') enSlugs.add(slug);
+				const [, lang, slug] = file.replace("./src/content/docs/", "").match(/^([^/]+)\/(.+)$/);
+				if (lang === "en") enSlugs.add(slug);
 				return [lang, slug];
 			})
 			.forEach(([lang, slug]) => {
@@ -37,15 +37,15 @@ class SlugChecker {
 			console.log(kleur.green().bold(`\n*** Found no translations with mismatched slugs\n`));
 			return;
 		}
-		const prefix = kleur.gray(`  [${kleur.red().bold(' ✖ ')}] `);
+		const prefix = kleur.gray(`  [${kleur.red().bold(" ✖ ")}] `);
 		let errorCount = 0;
 		for (const [lang, slugs] of errors) {
 			errorCount += slugs.length;
 			const summary = [`\n/${lang}/`, ...slugs.map((slug) => prefix + slug)];
-			console.error(summary.join('\n'));
+			console.error(summary.join("\n"));
 		}
 		console.error(kleur.red().bold(`\n*** Found ${errorCount} translations with mismatched slugs`));
-		console.error('    Rename the files listed above to match English slugs\n');
+		console.error("    Rename the files listed above to match English slugs\n");
 		process.exit(1);
 	}
 }

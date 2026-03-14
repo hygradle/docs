@@ -18,7 +18,7 @@
 	text-decoration: none;
 }
 .TabGroup .active,
-.TabGroup [aria-selected='true'] {
+.TabGroup [aria-selected="true"] {
 	color: var(--theme-text);
 	border-bottom-color: var(--theme-accent);
 	font-weight: bold;

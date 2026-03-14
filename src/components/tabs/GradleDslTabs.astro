@@ -1,0 +1,12 @@
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+---
+
+<Tabs syncKey="gradle-dsl">
+	<TabItem label="Kotlin">
+		<slot name="kotlin" />
+	</TabItem>
+	<TabItem label="Groovy">
+		<slot name="groovy" />
+	</TabItem>
+</Tabs>

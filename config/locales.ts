@@ -1,15 +1,15 @@
-import type { StarlightUserConfig } from '@astrojs/starlight/types';
+import type { StarlightUserConfig } from "@astrojs/starlight/types";
 
 /**
  * Starlight i18n configuration.
  * @see https://starlight.astro.build/reference/configuration/#locales
  */
 export const localesConfig = {
-	en: { label: 'English', lang: 'en', dir: 'ltr' },
-} satisfies StarlightUserConfig['locales'];
+	en: { label: "English", lang: "en", dir: "ltr" },
+} satisfies StarlightUserConfig["locales"];
 
 /** The only two languages to build to speed up Astro's smoke tests. */
-const twoLanguages: (keyof typeof localesConfig)[] = ['en'];
+const twoLanguages: (keyof typeof localesConfig)[] = ["en"];
 
 /** Starlight i18n configuration used for Astro's smoke tests. */
 export const twoLocalesConfig = Object.fromEntries(
@@ -17,9 +17,9 @@ export const twoLocalesConfig = Object.fromEntries(
 		const localeConfig = localesConfig?.[lang];
 		if (!localeConfig) {
 			throw new Error(
-				`The locale config for Astro smoke tests is referencing a non-existent language: "${lang}"`
+				`The locale config for Astro smoke tests is referencing a non-existent language: "${lang}"`,
 			);
 		}
 		return [lang, localeConfig];
-	})
+	}),
 );

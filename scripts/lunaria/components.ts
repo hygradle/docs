@@ -4,14 +4,14 @@ import {
 	type LunariaConfig,
 	type LunariaStatus,
 	type StatusEntry,
-} from '@lunariajs/core';
-import { BaseStyles, CustomStyles } from './styles.ts';
+} from "@lunariajs/core";
+import { BaseStyles, CustomStyles } from "./styles.ts";
 
 export function html(
 	strings: TemplateStringsArray,
 	...values: ((string | number) | (string | number)[])[]
 ) {
-	const treatedValues = values.map((value) => (Array.isArray(value) ? value.join('') : value));
+	const treatedValues = values.map((value) => (Array.isArray(value) ? value.join("") : value));
 
 	return String.raw({ raw: strings }, ...treatedValues);
 }
@@ -19,10 +19,10 @@ export function html(
 type LunariaInstance = Awaited<ReturnType<typeof createLunaria>>;
 
 function collapsePath(path: string) {
-	const basesToHide = ['src/content/docs/en/', 'src/i18n/en/', 'src/content/docs/', 'src/content/'];
+	const basesToHide = ["src/content/docs/en/", "src/i18n/en/", "src/content/docs/", "src/content/"];
 
 	for (const base of basesToHide) {
-		const newPath = path.replace(base, '');
+		const newPath = path.replace(base, "");
 
 		if (newPath === path) continue;
 		return newPath;
@@ -34,7 +34,7 @@ function collapsePath(path: string) {
 export const Page = (
 	config: LunariaConfig,
 	status: LunariaStatus,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	return html`
 		<!doctype html>
@@ -73,7 +73,7 @@ export const Meta = html`
 export const Body = (
 	config: LunariaConfig,
 	status: LunariaStatus,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	return html`
 		<main>
@@ -89,7 +89,7 @@ export const Body = (
 export const StatusByLocale = (
 	config: LunariaConfig,
 	status: LunariaStatus,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const { locales } = config;
 	return html`
@@ -103,24 +103,24 @@ export const StatusByLocale = (
 export const LocaleDetails = (
 	status: LunariaStatus,
 	locale: Locale,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const { label, lang } = locale;
 
 	const missingFiles = status.filter(
 		(file) =>
-			file.localizations.find((localization) => localization.lang === lang)?.status === 'missing'
+			file.localizations.find((localization) => localization.lang === lang)?.status === "missing",
 	);
 	const outdatedFiles = status.filter((file) => {
 		const localization = file.localizations.find((localization) => localization.lang === lang);
 
-		if (!localization || localization.status === 'missing') return false;
-		if (file.type === 'dictionary')
-			return 'missingKeys' in localization ? localization.missingKeys.length > 0 : false;
+		if (!localization || localization.status === "missing") return false;
+		if (file.type === "dictionary")
+			return "missingKeys" in localization ? localization.missingKeys.length > 0 : false;
 
 		return (
-			localization.status === 'outdated' ||
-			('missingKeys' in localization && localization.missingKeys.length > 0)
+			localization.status === "outdated" ||
+			("missingKeys" in localization && localization.missingKeys.length > 0)
 		);
 	});
 
@@ -140,26 +140,32 @@ export const LocaleDetails = (
 				<br />
 				${ProgressBar(status.length, outdatedFiles.length, missingFiles.length)}
 			</summary>
-			${outdatedFiles.length > 0 ? OutdatedFiles(outdatedFiles, lang, lunaria) : ''}
-			${missingFiles.length > 0
-				? html`<h3 class="capitalize">Missing</h3>
+			${outdatedFiles.length > 0 ? OutdatedFiles(outdatedFiles, lang, lunaria) : ""}
+			${
+				missingFiles.length > 0
+					? html`<h3 class="capitalize">Missing</h3>
 						<ul>
 							${missingFiles.map((file) => {
 								const localization = file.localizations.find(
-									(localization) => localization.lang === lang
+									(localization) => localization.lang === lang,
 								)!;
 								return html`
 									<li>
 										${Link(links.source(file.source.path), collapsePath(file.source.path))}
-										${CreateFileLink(links.create(localization.path), 'Create file')}
+										${CreateFileLink(links.create(localization.path), "Create file")}
 									</li>
 								`;
 							})}
 						</ul>`
-				: ''}
-			${missingFiles.length == 0 && outdatedFiles.length == 0
-				? html`<p>This translation is complete, amazing job! 🎉</p>`
-				: ''}
+					: ""
+			}
+			${
+				missingFiles.length == 0 && outdatedFiles.length == 0
+					? html`
+							<p>This translation is complete, amazing job! 🎉</p>
+						`
+					: ""
+			}
 		</details>
 	`;
 };
@@ -167,7 +173,7 @@ export const LocaleDetails = (
 export const OutdatedFiles = (
 	outdatedFiles: LunariaStatus,
 	lang: string,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	return html`
 		<h3 class="capitalize">Outdated</h3>
@@ -176,14 +182,15 @@ export const OutdatedFiles = (
 				const localization = file.localizations.find((localization) => localization.lang === lang)!;
 
 				const isMissingKeys =
-					localization.status !== 'missing' &&
-					'missingKeys' in localization &&
+					localization.status !== "missing" &&
+					"missingKeys" in localization &&
 					localization.missingKeys.length > 0;
 
 				return html`
 					<li>
-						${isMissingKeys
-							? html`
+						${
+							isMissingKeys
+								? html`
 									<details>
 										<summary>${ContentDetailsLinks(file, lang, lunaria)}</summary>
 										<h4>Missing keys</h4>
@@ -192,7 +199,8 @@ export const OutdatedFiles = (
 										</ul>
 									</details>
 								`
-							: html` ${ContentDetailsLinks(file, lang, lunaria)} `}
+								: html` ${ContentDetailsLinks(file, lang, lunaria)} `
+						}
 					</li>
 				`;
 			})}
@@ -203,7 +211,7 @@ export const OutdatedFiles = (
 export const StatusByFile = (
 	config: LunariaConfig,
 	status: LunariaStatus,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const { locales } = config;
 	return html`
@@ -213,7 +221,7 @@ export const StatusByFile = (
 		<table class="status-by-file">
 			<thead>
 				<tr>
-					${['File', ...locales.map(({ lang }) => lang)].map((col) => html`<th>${col}</th>`)}
+					${["File", ...locales.map(({ lang }) => lang)].map((col) => html`<th>${col}</th>`)}
 				</tr>
 			</thead>
 			${TableBody(status, locales, lunaria)}
@@ -225,7 +233,7 @@ export const StatusByFile = (
 export const TableBody = (
 	status: LunariaStatus,
 	locales: Locale[],
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const links = lunaria.gitHostingLinks();
 
@@ -240,35 +248,35 @@ export const TableBody = (
 							return TableContentStatus(file.localizations, lang, lunaria);
 						})}
 					</td>
-				</tr>`
+				</tr>`,
 			)}
 		</tbody>
 	`;
 };
 
 export const TableContentStatus = (
-	localizations: StatusEntry['localizations'],
+	localizations: StatusEntry["localizations"],
 	lang: string,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const localization = localizations.find((localization) => localization.lang === lang)!;
-	const isMissingKeys = 'missingKeys' in localization && localization.missingKeys.length > 0;
-	const status = isMissingKeys ? 'outdated' : localization.status;
+	const isMissingKeys = "missingKeys" in localization && localization.missingKeys.length > 0;
+	const status = isMissingKeys ? "outdated" : localization.status;
 	const links = lunaria.gitHostingLinks();
 	const link =
-		status === 'missing' ? links.create(localization.path) : links.source(localization.path);
+		status === "missing" ? links.create(localization.path) : links.source(localization.path);
 	return html`<td>${EmojiFileLink(link, status)}</td>`;
 };
 
 export const ContentDetailsLinks = (
 	fileStatus: StatusEntry,
 	lang: string,
-	lunaria: LunariaInstance
+	lunaria: LunariaInstance,
 ): string => {
 	const localization = fileStatus.localizations.find((localization) => localization.lang === lang)!;
 	const isMissingKeys =
-		localization.status !== 'missing' &&
-		'missingKeys' in localization &&
+		localization.status !== "missing" &&
+		"missingKeys" in localization &&
 		localization.missingKeys.length > 0;
 
 	const links = lunaria.gitHostingLinks();
@@ -277,34 +285,34 @@ export const ContentDetailsLinks = (
 		${Link(links.source(fileStatus.source.path), collapsePath(fileStatus.source.path))}
 		(${Link(
 			links.source(localization.path),
-			isMissingKeys ? 'incomplete translation' : 'outdated translation'
+			isMissingKeys ? "incomplete translation" : "outdated translation",
 		)},
 		${Link(
 			links.history(
 				fileStatus.source.path,
-				'git' in localization
+				"git" in localization
 					? new Date(localization.git.latestTrackedCommit.date).toISOString()
-					: undefined
+					: undefined,
 			),
-			'source change history'
+			"source change history",
 		)})
 	`;
 };
 
 export const EmojiFileLink = (
 	href: string | null,
-	type: 'missing' | 'outdated' | 'up-to-date'
+	type: "missing" | "outdated" | "up-to-date",
 ): string => {
 	const statusTextOpts = {
-		missing: 'missing',
-		outdated: 'outdated',
-		'up-to-date': 'done',
+		missing: "missing",
+		outdated: "outdated",
+		"up-to-date": "done",
 	} as const;
 
 	const statusEmojiOpts = {
-		missing: '❌',
-		outdated: '🔄',
-		'up-to-date': '✔',
+		missing: "❌",
+		outdated: "🔄",
+		"up-to-date": "✔",
 	} as const;
 
 	return href
@@ -328,13 +336,13 @@ export const ProgressBar = (
 	total: number,
 	outdated: number,
 	missing: number,
-	{ size = 20 }: { size?: number } = {}
+	{ size = 20 }: { size?: number } = {},
 ): string => {
 	const outdatedSize = Math.round((outdated / total) * size);
 	const missingSize = Math.round((missing / total) * size);
 	const doneSize = size - outdatedSize - missingSize;
 
-	const getBlocks = (size: number, type: 'missing' | 'outdated' | 'up-to-date') => {
+	const getBlocks = (size: number, type: "missing" | "outdated" | "up-to-date") => {
 		const items = [];
 		for (let i = 0; i < size; i++) {
 			items.push(html`<div class="${type}-bar"></div>`);
@@ -344,8 +352,8 @@ export const ProgressBar = (
 
 	return html`
 		<div class="progress-bar" aria-hidden="true">
-			${getBlocks(doneSize, 'up-to-date')} ${getBlocks(outdatedSize, 'outdated')}
-			${getBlocks(missingSize, 'missing')}
+			${getBlocks(doneSize, "up-to-date")} ${getBlocks(outdatedSize, "outdated")}
+			${getBlocks(missingSize, "missing")}
 		</div>
 	`;
 };
@@ -382,29 +390,29 @@ export const SvgSummary = (config: LunariaConfig, status: LunariaStatus): string
 				({ svg }, index) =>
 					html`<g transform="translate(${(index % 2) * 215} ${Math.floor(index / 2) * 56})"
 						>${svg}</g
-					>`
+					>`,
 			)}
 	</svg>`;
 };
 
 function SvgLocaleSummary(
 	status: LunariaStatus,
-	{ label, lang }: Locale
+	{ label, lang }: Locale,
 ): { svg: string; progress: number } {
 	const missingFiles = status.filter(
 		(file) =>
-			file.localizations.find((localization) => localization.lang === lang)?.status === 'missing'
+			file.localizations.find((localization) => localization.lang === lang)?.status === "missing",
 	);
 	const outdatedFiles = status.filter((file) => {
 		const localization = file.localizations.find((localization) => localization.lang === lang);
-		if (!localization || localization.status === 'missing') {
+		if (!localization || localization.status === "missing") {
 			return false;
-		} else if (file.type === 'dictionary') {
-			return 'missingKeys' in localization ? localization.missingKeys.length > 0 : false;
+		} else if (file.type === "dictionary") {
+			return "missingKeys" in localization ? localization.missingKeys.length > 0 : false;
 		} else {
 			return (
-				localization.status === 'outdated' ||
-				('missingKeys' in localization && localization.missingKeys.length > 0)
+				localization.status === "outdated" ||
+				("missingKeys" in localization && localization.missingKeys.length > 0)
 			);
 		}
 	});
@@ -422,10 +430,12 @@ function SvgLocaleSummary(
 				>${label} (${lang})</text
 			>
 			<text x="0" y="26" font-size="9" fill="#999">
-				${missingFiles.length == 0 && outdatedFiles.length == 0
-					? '100% complete, amazing job! 🎉'
-					: html`${doneLength} done, ${outdatedFiles.length} outdated, ${missingFiles.length}
-						missing`}
+				${
+					missingFiles.length == 0 && outdatedFiles.length == 0
+						? "100% complete, amazing job! 🎉"
+						: html`${doneLength} done, ${outdatedFiles.length} outdated, ${missingFiles.length}
+						missing`
+				}
 			</text>
 			<rect x="0" y="34" width="${barWidth}" height="8" fill="#999" opacity="0.25"></rect>
 			<rect x="0" y="34" width="${outdatedWidth}" height="8" fill="#fb923c"></rect>

@@ -1,6 +1,7 @@
 ---
 title: Getting Started
 ---
+import GradleDslTabs from "~/components/tabs/GradleDslTabs.astro"
 
 Hygradle is a Gradle plugin designed to fix (or at least make bearable) some of the pain points with Hytale mod/plugin development.
 A non-exhaustive list of features include:
@@ -17,6 +18,28 @@ A non-exhaustive list of features include:
 ## Installation
 
 It is recommended to use the Hygradle settings plugin and manage dependency repositories at the settings level, using [central declaration of repositories](https://docs.gradle.org/current/userguide/centralizing_repositories.html).
+
+<GradleDslTabs>
+  <Fragment slot="kotlin">
+    ```kotlin title="settings.gradle.kts"
+    pluginManagement {
+        repositories {
+            gradlePluginPortal()
+        }
+    }
+    
+    plugins {
+        id("dev.hygradle.settings") version "0.0.1"
+    }
+    
+    dependencyResolutionManagement {
+        repositories {
+            mavenCentral()
+        }
+    }
+    ```
+  </Fragment>
+</GradleDslTabs>
 
 ```kotlin title="settings.gradle.kts"
 pluginManagement {

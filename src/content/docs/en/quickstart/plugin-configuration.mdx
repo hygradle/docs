@@ -1,0 +1,61 @@
+---
+title: Plugin configuration
+---
+
+## Basic configuration
+
+Plugins are configured at the project level. Each plugin is built from exactly one Gradle source set (if you only have main, this will be the default and specifying it is optional). You must configure **at least** a main entrypoint class for your plugin, and a group and version (group and version will be inherited from the Gradle project, **only if they have been specified**.)
+
+```kotlin title="build.gradle.kts"
+import dev.hygradle.dsl.plugin.LatePlugin
+
+hygradle {
+  plugins {
+    register<LatePlugin>("examplePlugin") {
+      manifest {
+        mainClass = "whatever.my.fully.qualified.plugin.class.is"
+        group = "MyPlugin"
+        version = "0.1"
+      }
+    }
+  }
+}
+```
+
+## Plugin dependencies
+
+There will eventually come a time where you will need to pull in dependencies. Either other Hytale plugins that you want to extend, or plain JVM libraries that you'd like to leverage. Hygradle supports both - the `dependencies` DSL block when configuring a plugin can be used to specify runtime and compilation dependencies, which will be wired through to server runs.
+
+### External dependencies
+
+If you need to depend on a Hytale plugin, ensure you've correctly set up a Maven repository you can source the dependency from. Then add it to your plugin, and your plugin manifest respectively:
+
+```kotlin title="build.gradle.kts"
+import dev.hygradle.dsl.plugin.LatePlugin
+
+hygradle {
+  plugins {
+    register<LatePlugin>("examplePlugin") {
+      dependencies {
+        // For runtime only dependencies
+        runtimeOnly("other:mavenartifact:version")
+        
+        // For compile-time only dependencies
+        compileOnly("other:mavenartifact:version")
+      }
+      
+      manifest {
+        mainClass = "whatever.my.fully.qualified.plugin.class.is"
+        group = "MyPlugin"
+        version = "0.1"
+        
+        dependency {
+          name = "Dependency"
+          group = "OtherAuthor"
+          version = "whateverversionrange"
+        }
+      }
+    }
+  }
+}
+```

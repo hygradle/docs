@@ -8,7 +8,7 @@ footer.contribute: Contribute
 footer.translatePage: Translate this page
 footer.sponsor: Sponsor
 # Used in `<Since>`: Added in: v0.24.0 [NEW]
-since.addedIn: 'Added in:'
+since.addedIn: "Added in:"
 since.new: New
 since.beta: Beta
 # Installation Guide
@@ -28,7 +28,7 @@ media.navTitle: More hosted media guides
 # Migration Guides vocabulary
 migration.navTitle: More migration guides
 # `<RecipeLinks>` vocabulary
-recipesLink.singular: 'Related recipe:'
+recipesLink.singular: "Related recipe:"
 recipesLink.plural: Related recipes
 # 404 Page
 404.title: Not Found
@@ -53,7 +53,7 @@ progress.done: Complete
 # Tutorial Navigation
 tutorial.trackerLabel: Tutorial Tracker
 tutorial.unit: Unit
-tutorial.title.prefix: 'Build a blog tutorial: {{title}}'
+tutorial.title.prefix: "Build a blog tutorial: {{title}}"
 # Tutorial
 tutorial.getReady: Get ready to…
 # Code snippet vocabulary
@@ -68,7 +68,7 @@ starlight.description: Grab this template to get started.
 # `<StudioHeading>` component
 studioHeading.label: Studio feature
 # Upgrade guide
-upgrade.implementationPR: 'Implementation PR: '
+upgrade.implementationPR: "Implementation PR: "
 
 # DocSearch component strings
 docsearch.button: Search

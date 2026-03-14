@@ -12,10 +12,10 @@ function polToCar(px: number, py: number, r: number, angleInDegrees: number) {
 
 function getArcString(
 	angle: number,
-	{ cx, cy, r, isLargeArc }: { cx: number; cy: number; r: number; isLargeArc: boolean }
+	{ cx, cy, r, isLargeArc }: { cx: number; cy: number; r: number; isLargeArc: boolean },
 ) {
 	const { x, y } = polToCar(cx, cy, r, angle);
-	return `A${r},${r} 0 ${isLargeArc ? '1' : '0'} 0 ${x},${y}`;
+	return `A${r},${r} 0 ${isLargeArc ? "1" : "0"} 0 ${x},${y}`;
 }
 
 interface SectorOpts {
@@ -46,14 +46,14 @@ export function SectorPath({ cx = 0, cy = 0, r, startAngle, endAngle, arc = fals
 	const isLargeArc = endAngle - startAngle > 180;
 
 	const arcString = getArcString(startAngle, { cx, cy, r, isLargeArc });
-	let endString = '';
-	let startString = '';
+	let endString = "";
+	let startString = "";
 
 	if (arc) {
 		startString = `M${start.x},${start.y}`;
 	} else {
 		startString = `M${cx},${cy} L${start.x},${start.y}`;
-		endString = 'z';
+		endString = "z";
 	}
 
 	const d = `${startString} ${arcString} ${endString}`;

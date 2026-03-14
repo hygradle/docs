@@ -1,21 +1,21 @@
-import fs from 'fs';
-import type { Root } from 'mdast';
-import path from 'path';
-import type { Plugin, Transformer } from 'unified';
-import { visit } from 'unist-util-visit';
+import fs from "fs";
+import type { Root } from "mdast";
+import path from "path";
+import type { Plugin, Transformer } from "unified";
+import { visit } from "unist-util-visit";
 
 export function remarkFallbackLang(): Plugin<[], Root> {
-	const pageSourceDir = path.resolve('./src/content/docs');
-	const baseUrl = 'https://docs.astro.build/';
+	const pageSourceDir = path.resolve("./src/content/docs");
+	const baseUrl = "https://docs.astro.build/";
 
 	const transformer: Transformer<Root> = (tree, file) => {
 		const pageUrl = mdFilePathToUrl(file.path, pageSourceDir, baseUrl);
 		const pageLang = getLanguageCodeFromPathname(pageUrl.pathname);
 
 		// Ignore pages without language prefix and English pages
-		if (!pageLang || pageLang === 'en') return;
+		if (!pageLang || pageLang === "en") return;
 
-		visit(tree, 'link', (link) => {
+		visit(tree, "link", (link) => {
 			const linkUrl = new URL(link.url, pageUrl);
 
 			// Ignore external links
@@ -30,7 +30,7 @@ export function remarkFallbackLang(): Plugin<[], Root> {
 			if (linkSourceFileName) return;
 
 			link.children.push({
-				type: 'text',
+				type: "text",
 				value: `\u00A0(EN)`,
 			});
 		});
@@ -43,7 +43,7 @@ export function remarkFallbackLang(): Plugin<[], Root> {
 
 function mdFilePathToUrl(mdFilePath: string, pageSourceDir: string, baseUrl: string) {
 	const pathBelowRoot = path.relative(pageSourceDir, mdFilePath);
-	const pathname = pathBelowRoot.replace(/\\/g, '/').replace(/\.mdx?$/i, '/');
+	const pathname = pathBelowRoot.replace(/\\/g, "/").replace(/\.mdx?$/i, "/");
 
 	return new URL(pathname, baseUrl);
 }
@@ -51,7 +51,7 @@ function mdFilePathToUrl(mdFilePath: string, pageSourceDir: string, baseUrl: str
 function getLanguageCodeFromPathname(pathname: string) {
 	// Assuming that `pathname` always starts with a `/`, retrieve the first path part,
 	// which is usually the language code
-	const firstPathPart = pathname.split('/')[1];
+	const firstPathPart = pathname.split("/")[1];
 	// Only return parts that look like a two-letter language code
 	// with optional two-letter country code
 	if (firstPathPart.match(/^[a-z]{2}(-[a-zA-Z]{2})?$/)) return firstPathPart;
@@ -72,10 +72,10 @@ function getLanguageCodeFromPathname(pathname: string) {
  */
 function tryFindSourceFileForPathname(pathname: string, pageSourceDir: string) {
 	const possibleSourceFilePaths = [
-		path.join(pageSourceDir, pathname, '.') + '.md',
-		path.join(pageSourceDir, pathname, 'index.md'),
-		path.join(pageSourceDir, pathname, '.') + '.mdx',
-		path.join(pageSourceDir, pathname, 'index.mdx'),
+		path.join(pageSourceDir, pathname, ".") + ".md",
+		path.join(pageSourceDir, pathname, "index.md"),
+		path.join(pageSourceDir, pathname, ".") + ".mdx",
+		path.join(pageSourceDir, pathname, "index.mdx"),
 	];
 	return possibleSourceFilePaths.find((possiblePath) => fs.existsSync(possiblePath));
 }

@@ -1,7 +1,7 @@
-import { join } from 'node:path';
-import type { LinkIssue } from './issue.ts';
-import type { AllPagesByPathname, HtmlPage } from './page.ts';
-import { existsSync } from 'node:fs';
+import { join } from "node:path";
+import type { LinkIssue } from "./issue.ts";
+import type { AllPagesByPathname, HtmlPage } from "./page.ts";
+import { existsSync } from "node:fs";
 
 export interface CheckHtmlPageContext {
 	allPages: AllPagesByPathname;
@@ -9,7 +9,7 @@ export interface CheckHtmlPageContext {
 	baseUrl: string;
 	checkSingleLinkHref?: string;
 	buildOutputDir: string;
-	report: (issueData: Omit<LinkIssue, 'page' | 'check' | 'sourceFileAnnotations'>) => void;
+	report: (issueData: Omit<LinkIssue, "page" | "check" | "sourceFileAnnotations">) => void;
 }
 
 const fileExtensionRegex = /\.[^/]+$/i;
@@ -20,7 +20,7 @@ export abstract class CheckBase {
 
 	protected forEachLocalLink(
 		context: CheckHtmlPageContext,
-		fn: (linkHref: string, url: URL) => void
+		fn: (linkHref: string, url: URL) => void,
 	) {
 		// If requested, only check a single link href (used to validate autofix suggestions),
 		// or perform the default behavior and check all unique link hrefs on the page
@@ -41,7 +41,7 @@ export abstract class CheckBase {
 
 	protected findFileByPathname(
 		context: CheckHtmlPageContext,
-		pathname: string
+		pathname: string,
 	): string | undefined {
 		if (this.foundFiles.has(pathname)) {
 			return this.foundFiles.get(pathname);
@@ -60,8 +60,8 @@ export abstract class CheckBase {
 	}
 
 	protected findPageByPathname(context: CheckHtmlPageContext, pathname: string) {
-		if (!pathname.endsWith('/')) {
-			pathname += '/';
+		if (!pathname.endsWith("/")) {
+			pathname += "/";
 		}
 
 		return context.allPages[pathname];

@@ -1,7 +1,7 @@
-import type starlight from '@astrojs/starlight';
-import enLabels from '../src/content/nav/en';
+import type starlight from "@astrojs/starlight";
+import enLabels from "../src/content/nav/en";
 
-type StarlightSidebarConfig = NonNullable<Parameters<typeof starlight>[0]['sidebar']>;
+type StarlightSidebarConfig = NonNullable<Parameters<typeof starlight>[0]["sidebar"]>;
 type StarlightSidebarEntry = StarlightSidebarConfig[number];
 type StarlightManualSidebarGroup = Extract<StarlightSidebarEntry, { items: any[] }>;
 type StarlightAutoSidebarGroup = Extract<StarlightSidebarEntry, { autogenerate: any }>;
@@ -10,9 +10,9 @@ type NavKey = keyof typeof enLabels;
 type NavDict = Record<NavKey, string>;
 
 const translations = Object.entries(
-	import.meta.glob<{ default: NavDict }>('../src/content/nav/*.ts', { eager: true })
+	import.meta.glob<{ default: NavDict }>("../src/content/nav/*.ts", { eager: true }),
 )
-	.map(([path, mod]) => [path.split('/').pop()!.replace('.ts', ''), mod.default] as const)
+	.map(([path, mod]) => [path.split("/").pop()!.replace(".ts", ""), mod.default] as const)
 	.reduce(
 		(translations, [lang, dict]) => {
 			for (const _k in dict) {
@@ -22,7 +22,7 @@ const translations = Object.entries(
 			}
 			return translations;
 		},
-		{} as Record<NavKey, Record<string, string>>
+		{} as Record<NavKey, Record<string, string>>,
 	);
 
 /**
@@ -31,7 +31,7 @@ const translations = Object.entries(
  */
 export function group(
 	key: NavKey,
-	group: Omit<StarlightManualSidebarGroup, 'label'> | Omit<StarlightAutoSidebarGroup, 'label'>
+	group: Omit<StarlightManualSidebarGroup, "label"> | Omit<StarlightAutoSidebarGroup, "label">,
 ): StarlightManualSidebarGroup | StarlightAutoSidebarGroup {
 	return {
 		label: enLabels[key],

@@ -64,7 +64,7 @@
 /en/quick-started                               /en/installation/
 
 # Redirect root to English homepage
-/                                               /en/getting-started/
+/                                               /en/overview/
 
 # Translated 404s
 # /:lang/*                                        /:lang/404/ 404

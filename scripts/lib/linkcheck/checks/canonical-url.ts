@@ -1,7 +1,7 @@
-import kleur from 'kleur';
-import { dedentMd } from '../../output.mjs';
-import { CheckBase, type CheckHtmlPageContext } from '../base/check.ts';
-import { IssueType } from '../base/issue.ts';
+import kleur from "kleur";
+import { dedentMd } from "../../output.mjs";
+import { CheckBase, type CheckHtmlPageContext } from "../base/check.ts";
+import { IssueType } from "../base/issue.ts";
 
 export interface CanonicalUrlOptions {
 	/**
@@ -16,18 +16,18 @@ export interface CanonicalUrlOptions {
 
 export class CanonicalUrl extends CheckBase {
 	private static readonly LinkToRedirectPage = new IssueType({
-		title: 'link(s) to meta refresh page(s)',
-		prefix: kleur.gray(`[${kleur.blue().bold('ref')}]`),
+		title: "link(s) to meta refresh page(s)",
+		prefix: kleur.gray(`[${kleur.blue().bold("ref")}]`),
 		sortOrder: 500,
 	});
 	private static readonly LinkToNonCanonicalUrl = new IssueType({
-		title: 'link(s) not using canonical url(s)',
-		prefix: kleur.gray(`[${kleur.blue().bold('can')}]`),
+		title: "link(s) not using canonical url(s)",
+		prefix: kleur.gray(`[${kleur.blue().bold("can")}]`),
 		sortOrder: 501,
 	});
 	private static readonly MissingCanonicalUrl = new IssueType({
-		title: 'page(s) missing canonical url(s)',
-		prefix: kleur.gray(`[${kleur.blue().bold('mcu')}]`),
+		title: "page(s) missing canonical url(s)",
+		prefix: kleur.gray(`[${kleur.blue().bold("mcu")}]`),
 		sortOrder: 502,
 	});
 
@@ -49,15 +49,15 @@ export class CanonicalUrl extends CheckBase {
 			if (!linkedPage) return;
 
 			// Ignore links that do not contain a pathname
-			const rawUrl = new URL(linkHref, 'https://example.com/no-pathname/');
-			if (rawUrl.pathname === '/no-pathname/') return;
+			const rawUrl = new URL(linkHref, "https://example.com/no-pathname/");
+			if (rawUrl.pathname === "/no-pathname/") return;
 
 			// Report links to redirect pages
 			if (linkedPage.redirectTargetUrl) {
 				// Attempt to find the page targeted by the redirect and get its proper pathname
 				const redirectTargetPage = this.findPageByPathname(
 					context,
-					linkedPage.redirectTargetUrl.pathname
+					linkedPage.redirectTargetUrl.pathname,
 				);
 				const targetPathname = redirectTargetPage
 					? redirectTargetPage.getExpectedLinkPathname(context.page.pathnameLang)
@@ -81,7 +81,7 @@ export class CanonicalUrl extends CheckBase {
 				// If the linked page is not on the ignore list,
 				// report the missing canonical URL
 				const isOnIgnoreList = this.ignoreMissingCanonicalUrl.some((ignoredPath) =>
-					url.pathname.startsWith(ignoredPath)
+					url.pathname.startsWith(ignoredPath),
 				);
 				if (!isOnIgnoreList) {
 					context.report({

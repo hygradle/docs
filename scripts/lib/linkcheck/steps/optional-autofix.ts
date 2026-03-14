@@ -1,8 +1,8 @@
-import fs from 'fs';
-import kleur from 'kleur';
-import { dedentMd, formatCount } from '../../output.mjs';
-import { LinkCheckerState, replaceHrefs, type LinkCheckerOptions } from '../base/base.ts';
-import type { LinkIssue } from '../base/issue.ts';
+import fs from "fs";
+import kleur from "kleur";
+import { dedentMd, formatCount } from "../../output.mjs";
+import { LinkCheckerState, replaceHrefs, type LinkCheckerOptions } from "../base/base.ts";
+import type { LinkIssue } from "../base/issue.ts";
 
 /**
  * Handle all autofix-related tasks:
@@ -14,7 +14,7 @@ import type { LinkIssue } from '../base/issue.ts';
 export function handlePossibleAutofix(
 	linkIssues: LinkIssue[],
 	options: LinkCheckerOptions,
-	state: LinkCheckerState
+	state: LinkCheckerState,
 ): boolean {
 	// If we've been called from the second `run()` pass after an autofix,
 	// inform the user about the result
@@ -24,8 +24,8 @@ export function handlePossibleAutofix(
 				? `Any remaining issues above must be fixed manually.`
 				: `There's nothing left to do!`;
 		outputAutofixMessage(
-			'Autofix complete',
-			`${formatCount(state.autofixedCount, 'issue was|issues were')} autofixed. ${todos}`
+			"Autofix complete",
+			`${formatCount(state.autofixedCount, "issue was|issues were")} autofixed. ${todos}`,
 		);
 		return false;
 	}
@@ -37,7 +37,7 @@ export function handlePossibleAutofix(
 	const autofixCount = linkIssues.reduce(
 		(prev, linkIssue) =>
 			prev + (linkIssue.autofixHref ? linkIssue.sourceFileAnnotations.length : 0),
-		0
+		0,
 	);
 
 	// Skip autofix if it wasn't requested
@@ -45,9 +45,9 @@ export function handlePossibleAutofix(
 		// Before skipping, promote the autofix option if available
 		if (autofixCount > 0) {
 			outputAutofixMessage(
-				'Autofix available',
-				dedentMd`${formatCount(autofixCount, 'issue(s)')}
-					can be fixed automatically with "--autofix".`
+				"Autofix available",
+				dedentMd`${formatCount(autofixCount, "issue(s)")}
+					can be fixed automatically with "--autofix".`,
 			);
 		}
 		return false;
@@ -56,8 +56,8 @@ export function handlePossibleAutofix(
 	// Give feedback if a requested autofix is not available for the found issues
 	if (!autofixCount) {
 		outputAutofixMessage(
-			'Autofix unavailable',
-			'Autofix was requested, but there are no autofixable issues.'
+			"Autofix unavailable",
+			"Autofix was requested, but there are no autofixable issues.",
 		);
 		return false;
 	}
@@ -67,14 +67,14 @@ export function handlePossibleAutofix(
 		linkIssues.flatMap(
 			(linkIssue) =>
 				linkIssue.autofixHref &&
-				linkIssue.sourceFileAnnotations.map((annotation) => annotation.location.file)
-		)
+				linkIssue.sourceFileAnnotations.map((annotation) => annotation.location.file),
+		),
 	);
 
 	outputAutofixMessage(
-		'Starting autofix',
-		dedentMd`Autofixing ${formatCount(autofixCount, 'issue(s)')}
-			in ${formatCount(sourceFilesWithAutofixes.size, 'source file(s)')}...`
+		"Starting autofix",
+		dedentMd`Autofixing ${formatCount(autofixCount, "issue(s)")}
+			in ${formatCount(sourceFilesWithAutofixes.size, "source file(s)")}...`,
 	);
 
 	sourceFilesWithAutofixes.forEach((sourceFilePath) => {
@@ -85,7 +85,7 @@ export function handlePossibleAutofix(
 	// Remember that we performed an autofix
 	state.autofixedCount = autofixCount;
 
-	outputAutofixMessage('Checking result', 'Scanning for remaining issues after autofix...');
+	outputAutofixMessage("Checking result", "Scanning for remaining issues after autofix...");
 
 	// Return true to trigger a new `run()` pass
 	return true;
@@ -94,9 +94,9 @@ export function handlePossibleAutofix(
 function autofixIssuesInSourceFile(
 	sourceFilePath: string,
 	linkIssues: LinkIssue[],
-	state: LinkCheckerState
+	state: LinkCheckerState,
 ) {
-	const sourceFileContents = fs.readFileSync(sourceFilePath, 'utf8');
+	const sourceFileContents = fs.readFileSync(sourceFilePath, "utf8");
 
 	// Split the source file into lines, but this time also capture the line separators
 	// in the array, allowing us to put the file back together after autofixing
@@ -120,20 +120,20 @@ function autofixIssuesInSourceFile(
 			linesAndNewlines[lineIndex] = replaceHrefs(
 				linesAndNewlines[lineIndex],
 				linkIssue.linkHref,
-				linkIssue.autofixHref!
+				linkIssue.autofixHref!,
 			);
 		});
 	});
 
 	// Put the autofixed contents back together, retaining the exact newlines we captured,
 	// and update the source file with the new contents
-	const autofixedSourceFileContents = linesAndNewlines.join('');
+	const autofixedSourceFileContents = linesAndNewlines.join("");
 	if (sourceFileContents === autofixedSourceFileContents)
 		throw new Error(`Failed to autofix "${sourceFilePath}": File contents did not change`);
 	fs.writeFileSync(sourceFilePath, autofixedSourceFileContents);
 }
 
 function outputAutofixMessage(title: string, message: string) {
-	console.log(kleur.magenta().bold(kleur.inverse(` ${title} `) + ' ' + message));
+	console.log(kleur.magenta().bold(kleur.inverse(` ${title} `) + " " + message));
 	console.log();
 }

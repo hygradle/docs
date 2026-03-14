@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { dedentMd } from '../../output.mjs';
-import type { LinkCheckerOptions } from '../base/base.ts';
-import { HtmlPage, type AllPagesByPathname } from '../base/page.ts';
+import fs from "fs";
+import path from "path";
+import { dedentMd } from "../../output.mjs";
+import type { LinkCheckerOptions } from "../base/base.ts";
+import { HtmlPage, type AllPagesByPathname } from "../base/page.ts";
 
 /**
  * Reads sitemaps from the build output and extracts all unique pathnames.
@@ -12,12 +12,12 @@ export function getPagePathnamesFromSitemap(options: LinkCheckerOptions) {
 	const distContents = fs.readdirSync(options.buildOutputDir);
 	const sitemaps = distContents.filter((path) => /^sitemap-\d+\.xml$/.test(path));
 
-	const sitemapRegex = new RegExp(`<loc>${options.baseUrl}(/.*?)</loc>`, 'ig');
+	const sitemapRegex = new RegExp(`<loc>${options.baseUrl}(/.*?)</loc>`, "ig");
 	const uniquePagePaths = new Set<string>();
 
 	for (const filename of sitemaps) {
 		const sitemapFilePath = path.join(options.buildOutputDir, filename);
-		const sitemap = fs.readFileSync(sitemapFilePath, 'utf8');
+		const sitemap = fs.readFileSync(sitemapFilePath, "utf8");
 		const paths = Array.from(sitemap.matchAll(sitemapRegex), (m) => m[1]);
 		paths.forEach((path) => uniquePagePaths.add(path));
 	}
@@ -47,12 +47,12 @@ function parsePage(pathname: string, options: LinkCheckerOptions): HtmlPage {
 
 	try {
 		// Attempt to load the HTML file and create a page instance to parse it
-		const html = fs.readFileSync(htmlFilePath, 'utf8');
+		const html = fs.readFileSync(htmlFilePath, "utf8");
 		const htmlPage = new HtmlPage({ html, href, pathname });
 
 		// Do not allow pages without main content unless they are a redirect
 		if (!htmlPage.isRedirect && !htmlPage.hasContent)
-			throw new Error('Failed to find main content - page has no <article> or <body>');
+			throw new Error("Failed to find main content - page has no <article> or <body>");
 
 		// Do not allow pages without a main content "lang" attribute unless they are a redirect
 		if (!htmlPage.isRedirect && !htmlPage.mainContentLang)
@@ -71,5 +71,5 @@ function pathnameToHref(pathname: string, baseUrl: string) {
 }
 
 function pathnameToHtmlFilePath(pathname: string, buildOutputDir: string) {
-	return path.join(buildOutputDir, pathname, 'index.html');
+	return path.join(buildOutputDir, pathname, "index.html");
 }

@@ -1,9 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import { dedentMd } from '../../output.mjs';
-import { indexOfHref, LinkCheckerState, type LinkCheckerOptions } from '../base/base.ts';
-import type { LinkIssue } from '../base/issue.ts';
-import type { AllPagesByPathname, HtmlPage } from '../base/page.ts';
+import fs from "fs";
+import path from "path";
+import { dedentMd } from "../../output.mjs";
+import { indexOfHref, LinkCheckerState, type LinkCheckerOptions } from "../base/base.ts";
+import type { LinkIssue } from "../base/issue.ts";
+import type { AllPagesByPathname, HtmlPage } from "../base/page.ts";
 
 /**
  * Goes through all pre-parsed and indexed pages, runs all configured checks,
@@ -12,7 +12,7 @@ import type { AllPagesByPathname, HtmlPage } from '../base/page.ts';
 export function findLinkIssues(
 	allPages: AllPagesByPathname,
 	options: LinkCheckerOptions,
-	state: LinkCheckerState
+	state: LinkCheckerState,
 ) {
 	const linkIssues: LinkIssue[] = [];
 
@@ -28,7 +28,7 @@ function findLinkIssuesOnPage(
 	allPages: AllPagesByPathname,
 	options: LinkCheckerOptions,
 	state: LinkCheckerState,
-	checkSingleLinkHref?: string
+	checkSingleLinkHref?: string,
 ) {
 	const linkIssues: LinkIssue[] = [];
 
@@ -44,7 +44,7 @@ function findLinkIssuesOnPage(
 				// if it was just autofixed in the source file
 				if (state.autofixedCount > 0) {
 					const wasAutofixedInSource = state.autofixedPathnameHrefs.has(
-						`${page.pathname},${issueData.linkHref}`
+						`${page.pathname},${issueData.linkHref}`,
 					);
 					if (wasAutofixedInSource) return;
 				}
@@ -57,7 +57,7 @@ function findLinkIssuesOnPage(
 						allPages,
 						options,
 						state,
-						issueData.autofixHref
+						issueData.autofixHref,
 					);
 					// Remove the autofix suggestion if it would still cause issues
 					if (autofixLinkIssues.length > 0) {
@@ -89,20 +89,20 @@ export function addSourceFileAnnotations(linkIssues: LinkIssue[], options: LinkC
 	// Go through the collected pathnames
 	pathnames.forEach((pathname) => {
 		// Try to find the Markdown source file for the current pathname
-		let sourceFilePath = tryFindSourceFileForPathname(pathname, options.pageSourceDir) || '';
+		let sourceFilePath = tryFindSourceFileForPathname(pathname, options.pageSourceDir) || "";
 
 		// If we could not find the source file, we can't create annotations for it
 		if (!sourceFilePath) return;
 
 		// Load the source file
-		sourceFilePath = sourceFilePath.replace(/\\/g, '/');
-		const sourceFileContents = fs.readFileSync(sourceFilePath, 'utf8');
+		sourceFilePath = sourceFilePath.replace(/\\/g, "/");
+		const sourceFileContents = fs.readFileSync(sourceFilePath, "utf8");
 		const lines = sourceFileContents.split(/\r?\n/);
 
 		// Try to locate all link issues in the source file and output error annotations
 		// including line and column numbers
 		const linkIssuesOnCurrentPage = linkIssues.filter(
-			(linkIssue) => linkIssue.page.pathname === pathname
+			(linkIssue) => linkIssue.page.pathname === pathname,
 		);
 		lines.forEach((line, idx) => {
 			const lineNumber = idx + 1;
@@ -144,10 +144,10 @@ export function addSourceFileAnnotations(linkIssues: LinkIssue[], options: LinkC
  */
 function tryFindSourceFileForPathname(pathname: string, pageSourceDir: string) {
 	const possibleSourceFilePaths = [
-		path.join(pageSourceDir, pathname, '.') + '.md',
-		path.join(pageSourceDir, pathname, 'index.md'),
-		path.join(pageSourceDir, pathname, '.') + '.mdx',
-		path.join(pageSourceDir, pathname, 'index.mdx'),
+		path.join(pageSourceDir, pathname, ".") + ".md",
+		path.join(pageSourceDir, pathname, "index.md"),
+		path.join(pageSourceDir, pathname, ".") + ".mdx",
+		path.join(pageSourceDir, pathname, "index.mdx"),
 	];
 	return possibleSourceFilePaths.find((possiblePath) => fs.existsSync(possiblePath));
 }

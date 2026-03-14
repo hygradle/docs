@@ -1,11 +1,11 @@
-import dedent from 'dedent-js';
+import dedent from "dedent-js";
 
 /**
  * Dedents the given markdown and replaces single newlines with spaces,
  * while leaving new paragraphs intact.
  */
 export function dedentMd(...markdown) {
-	return dedent(...markdown).replace(/(\S)\n(?!\n)/g, '$1 ');
+	return dedent(...markdown).replace(/(\S)\n(?!\n)/g, "$1 ");
 }
 
 /**
@@ -32,7 +32,7 @@ export function formatCount(count, template) {
 	};
 
 	const usePlural = count !== undefined && count !== 1;
-	const templateParts = template.split('|');
+	const templateParts = template.split("|");
 	const usedTemplate = templateParts.length === 2 ? templateParts[usePlural ? 1 : 0] : template;
-	return wrapWithCount(usedTemplate.replace(/\(s\)/g, usePlural ? 's' : ''));
+	return wrapWithCount(usedTemplate.replace(/\(s\)/g, usePlural ? "s" : ""));
 }
